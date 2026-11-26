@@ -4,6 +4,7 @@ import { Research } from "@/components/sections/Research";
 import { Work } from "@/components/sections/Work";
 import { Record } from "@/components/sections/Record";
 import { Toolkit } from "@/components/sections/Toolkit";
+import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Work />
       <Record />
       <Toolkit />
+      <Contact />
     </>
   );
 }
