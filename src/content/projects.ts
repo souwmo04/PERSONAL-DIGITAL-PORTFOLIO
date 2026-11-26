@@ -7,7 +7,8 @@ import type { Project } from "./types";
  *   after "Show all projects".
  * - Links left empty are hidden, so nothing on the site breaks.
  * - Screenshots: put images in /public/projects/<slug>/ and list them in
- *   `screenshots`. Until then each project shows its own animated artwork.
+ *   `screenshots` (and optionally `cover` for the card). Projects without a
+ *   cover show their animated artwork. Images come from each repo's docs/.
  */
 export const projects: Project[] = [
   {
@@ -77,6 +78,14 @@ export const projects: Project[] = [
       "Evaluated on 386 fictional scenarios covering retrieval, safety, generation quality and prompt ablations, with 95% intervals. 268 backend and 33 frontend tests pass in CI.",
     stack: ["Python", "FastAPI", "llama.cpp", "Qwen3-4B", "Multilingual E5", "TypeScript", "Vitest"],
     visual: "couplecare",
+    cover: { src: "/projects/couplecare-ai/landing.webp", alt: "CoupleCare AI landing page", width: 799, height: 506 },
+    screenshots: [
+      { src: "/projects/couplecare-ai/landing.webp", alt: "CoupleCare AI landing page in the light theme", width: 799, height: 506, caption: "Landing page" },
+      { src: "/projects/couplecare-ai/chat-english.webp", alt: "A chat reply in English with its sources listed in the side panel", width: 800, height: 500, caption: "Reply with sources in the side panel" },
+      { src: "/projects/couplecare-ai/chat-bangla.webp", alt: "A chat reply written in Bangla", width: 800, height: 500, caption: "Reply in Bangla" },
+      { src: "/projects/couplecare-ai/chat-coach.webp", alt: "Coach mode suggesting what to say next", width: 800, height: 500, caption: "Coach mode: what to say next" },
+      { src: "/projects/couplecare-ai/knowledge.webp", alt: "The knowledge base page in the dark theme", width: 799, height: 506, caption: "Knowledge base, dark theme" },
+    ],
     links: { github: "https://github.com/souwmo04/Couple-Care-AI-Rag-Model" },
   },
   {
@@ -141,6 +150,12 @@ export const projects: Project[] = [
     evaluation: "A research prototype, not a certified spacecraft fire-safety system.",
     stack: ["Python", "Scikit-learn", "SHAP", "FastAPI", "Next.js", "Jupyter"],
     visual: "flame",
+    screenshots: [
+      { src: "/projects/flameguard-ai/flammability.webp", alt: "Scatter plots of observed FLEX outcomes by oxygen level and droplet size, split by fuel and suppressant", width: 1600, height: 944, kind: "figure", caption: "Observed FLEX outcomes by oxygen level and droplet size" },
+      { src: "/projects/flameguard-ai/shap.webp", alt: "Bar charts of mean SHAP contribution: atmosphere 55%, droplet size 25%, fuel 20%", width: 1600, height: 495, kind: "figure", caption: "SHAP: which inputs move the fire-risk score most" },
+      { src: "/projects/flameguard-ai/roc.webp", alt: "ROC and precision-recall curves for the final model", width: 1600, height: 668, kind: "figure", caption: "ROC and precision-recall curves" },
+      { src: "/projects/flameguard-ai/risk-bands.webp", alt: "Risk bands produced by the final model", width: 1600, height: 513, kind: "figure", caption: "Risk bands" },
+    ],
     links: { github: "https://github.com/souwmo04/FlameGuard-AI-NASA-fire-safety-dashboard" },
   },
   {
@@ -164,6 +179,14 @@ export const projects: Project[] = [
     ],
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "MapLibre GL", "Supabase"],
     visual: "map",
+    cover: { src: "/projects/biteatlas/explore.webp", alt: "BiteAtlas explore view on desktop", width: 1366, height: 820 },
+    screenshots: [
+      { src: "/projects/biteatlas/explore.webp", alt: "Explore view on desktop: the area map with restaurant markers and a sidebar", width: 1366, height: 820, caption: "Explore view" },
+      { src: "/projects/biteatlas/dashboard.webp", alt: "Dashboard showing exploration progress across areas", width: 1366, height: 820, caption: "Progress dashboard" },
+      { src: "/projects/biteatlas/mobile-map.webp", alt: "The map on a phone", width: 390, height: 844, kind: "mobile", caption: "Map on mobile" },
+      { src: "/projects/biteatlas/mobile-detail.webp", alt: "Restaurant details in a bottom sheet on a phone", width: 390, height: 844, kind: "mobile", caption: "Restaurant details on mobile" },
+      { src: "/projects/biteatlas/poster.webp", alt: "BiteAtlas promo poster: How much of Dhaka have you tasted?", width: 1600, height: 900, caption: "Promo video poster" },
+    ],
     links: {
       github: "https://github.com/souwmo04/Dhaka-Restaurant-Exploration-Map",
       demo: "https://dhakarestuexplore.netlify.app",
@@ -243,6 +266,10 @@ export const projects: Project[] = [
       "The fine-tuned Wav2Vec 2.0 reached 48.13% accuracy, against 29.44% for the best classical baseline (Random Forest) and about 4.5% for the untrained base model.",
     stack: ["Python", "PyTorch", "Hugging Face Transformers", "Librosa", "Scikit-learn"],
     visual: "accent",
+    screenshots: [
+      { src: "/projects/speech-accent-recognition/finetuned.webp", alt: "Confusion matrix of the Wav2Vec 2.0 model fine-tuned for 15 epochs across 9 accent regions", width: 1200, height: 1000, kind: "figure", caption: "Fine-tuned Wav2Vec 2.0 (15 epochs): confusion matrix" },
+      { src: "/projects/speech-accent-recognition/baseline.webp", alt: "Confusion matrix of the classical MFCC baseline", width: 1200, height: 1000, kind: "figure", caption: "MFCC baseline: confusion matrix" },
+    ],
     links: { github: "https://github.com/souwmo04/speech_recognization_systems-group-6" },
   },
   {
