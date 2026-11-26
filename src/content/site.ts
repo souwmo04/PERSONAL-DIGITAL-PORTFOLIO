@@ -9,6 +9,7 @@ import type { LinkItem } from "./types";
 export const site = {
   name: "Fahim Foysal",
   firstName: "Fahim",
+  nickname: "Souwmik",
   /** Canonical URL. Set NEXT_PUBLIC_SITE_URL once you have a domain;
    *  on Vercel the production URL is picked up automatically. */
   url:
@@ -34,7 +35,7 @@ export const site = {
   },
 
   intro:
-    "I study how machines can read the world the way people do: through text, images and the interfaces in between. I'm a Computer Science undergraduate at North South University and a research assistant at the TriModal AI Lab. My work sits where vision-language models meet real software, and where AI is useful to people that technology usually forgets.",
+    "I'm a Computer Science and Engineering undergraduate at North South University and a research assistant at the TriModal AI Lab. I'm not interested in AI only in theory: I like experimenting with models, running the research, and turning ideas into systems people can actually use.",
 
   description:
     "Fahim Foysal is an AI researcher and software engineer from Bangladesh working on vision-language models, multimodal AI and accessible AI systems. Research Assistant at TriModal AI Lab, North South University.",
@@ -48,7 +49,9 @@ export const site = {
 
   social: {
     github: "https://github.com/souwmo04",
-    linkedin: "",
+    linkedin: "", // send your linkedin.com/in/... profile URL
+    leetcode: "https://leetcode.com/u/Fahim_F_Souwmik/",
+    behance: "https://www.behance.net/KingScorpe/projects",
     scholar: "",
     acl: "https://aclanthology.org/people/fahim-foysal/",
     orcid: "",
@@ -61,6 +64,8 @@ export const contactLinks: LinkItem[] = [
   { label: "Email", href: `mailto:${site.email}`, display: site.email },
   { label: "LinkedIn", href: site.social.linkedin, display: "Profile" },
   { label: "GitHub", href: site.social.github, display: "@souwmo04" },
+  { label: "LeetCode", href: site.social.leetcode, display: "Fahim_F_Souwmik" },
+  { label: "Behance", href: site.social.behance, display: "KingScorpe" },
   { label: "Google Scholar", href: site.social.scholar, display: "Citations" },
   { label: "ACL Anthology", href: site.social.acl, display: "Author page" },
   { label: "OpenReview", href: site.social.openreview, display: "Profile" },
@@ -73,8 +78,9 @@ export const navItems = [
   { id: "achievements", label: "Awards", n: "03" },
   { id: "research", label: "Research", n: "04" },
   { id: "work", label: "Projects", n: "05" },
-  { id: "stack", label: "Stack", n: "06" },
-  { id: "contact", label: "Contact", n: "07" },
+  { id: "design", label: "Design", n: "06" },
+  { id: "stack", label: "Stack", n: "07" },
+  { id: "contact", label: "Contact", n: "08" },
 ] as const;
 
 export const cvHref = site.cv.pdf || site.cv.page;
