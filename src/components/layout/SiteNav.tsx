@@ -79,7 +79,7 @@ export function SiteNav() {
             <RollText text="fahim.foysal" className="hidden font-display text-sm font-medium sm:inline-flex" />
           </Link>
 
-          <ul className="hidden items-center gap-1 lg:flex">
+          <ul className="hidden items-center gap-0.5 xl:flex">
             {navItems.map((item) => {
               const isActive = active === item.id;
               return (
@@ -87,7 +87,7 @@ export function SiteNav() {
                   <Link
                     href={href(item.id)}
                     aria-current={isActive ? "true" : undefined}
-                    className={`group relative block px-3.5 py-2 text-[0.78rem] font-medium uppercase tracking-[0.14em] transition-colors ${
+                    className={`group relative block px-3 py-2 text-[0.74rem] font-medium uppercase tracking-[0.14em] transition-colors ${
                       isActive ? "text-text" : "text-dim hover:text-text"
                     }`}
                   >
@@ -115,7 +115,7 @@ export function SiteNav() {
             <button
               ref={toggleRef}
               type="button"
-              className="relative grid size-11 place-items-center rounded-full border border-line lg:hidden"
+              className="relative grid size-11 place-items-center rounded-full border border-line xl:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -142,7 +142,7 @@ export function SiteNav() {
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="fixed inset-0 z-40 flex flex-col bg-void/95 pt-24 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col overflow-y-auto bg-void/95 pt-24 backdrop-blur-2xl xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
@@ -164,7 +164,7 @@ export function SiteNav() {
                       autoFocus={i === 0}
                     >
                       <span className="font-mono text-xs text-violet">{item.n}</span>
-                      <span className="heading-xl text-[clamp(2.5rem,11vw,4rem)]">{item.label}</span>
+                      <span className="heading-xl text-[clamp(2.1rem,9vw,3.5rem)]">{item.label}</span>
                     </Link>
                   </motion.div>
                 </li>
