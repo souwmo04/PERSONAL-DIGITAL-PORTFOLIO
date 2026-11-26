@@ -10,6 +10,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 const KIND_STYLE: Record<string, string> = {
   research: "",
+  engineering: "!border-sky-300/30 !bg-sky-300/10 !text-sky-100",
   design: "!border-pink-300/30 !bg-pink-300/10 !text-pink-200",
   leadership: "!border-amber-300/30 !bg-amber-300/10 !text-amber-200",
   education: "!border-aqua/30 !bg-aqua/10 !text-cyan-100",
@@ -71,14 +72,19 @@ export function Experience() {
                       <div className="relative flex flex-wrap items-center gap-3">
                         <span className={`pill !text-[0.625rem] ${KIND_STYLE[t.kind] ?? ""}`}>{t.kind}</span>
                         <span className="flex items-center gap-2 font-mono text-xs text-dim">
-                          {t.period.includes("Present") ? (
+                          {t.period.includes("Present") || t.period === "Ongoing" ? (
                             <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
                           ) : null}
                           {t.period}
                         </span>
                       </div>
                       <h3 className="font-display relative mt-5 text-2xl font-semibold leading-tight">{t.title}</h3>
-                      <p className="relative mt-1 text-sm text-iris">{t.org}</p>
+                      <p className="relative mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-iris">
+                        {t.org}
+                        {t.mode ? (
+                          <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-faint">— {t.mode}</span>
+                        ) : null}
+                      </p>
                       <p className="relative mt-4 text-[0.95rem] leading-relaxed text-dim">{t.detail}</p>
                       {t.points ? (
                         <ul className="relative mt-4 space-y-2">
@@ -86,6 +92,15 @@ export function Experience() {
                             <li key={pt} className="flex gap-2.5 text-sm leading-relaxed text-dim">
                               <span aria-hidden className="mt-2 size-1 shrink-0 rounded-full bg-iris" />
                               {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {t.tags?.length ? (
+                        <ul className="relative mt-5 flex flex-wrap gap-2 border-t border-line pt-5" aria-label="Skills">
+                          {t.tags.map((tag) => (
+                            <li key={tag} className="chip">
+                              {tag}
                             </li>
                           ))}
                         </ul>
