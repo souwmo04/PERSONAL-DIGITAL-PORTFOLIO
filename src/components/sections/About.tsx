@@ -1,91 +1,86 @@
 import { Reveal } from "@/components/motion/Reveal";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ScrollWords } from "@/components/motion/Text";
+import { CountUp } from "@/components/ui/CountUp";
+import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { about } from "@/content/about";
-import { timeline } from "@/content/experience";
+import { achievements } from "@/content/experience";
+import { projects } from "@/content/projects";
+import { publications } from "@/content/publications";
 
 export function About() {
+  const awards = achievements.filter((a) => a.event !== "ACL Anthology").length;
+  const stats = [
+    { n: publications.length, label: "ACL Anthology paper", suffix: "" },
+    { n: awards, label: "Competition awards", suffix: "" },
+    { n: projects.length, label: "Selected projects", suffix: "" },
+    { n: 2026, label: "Graduating, NSU", suffix: "" },
+  ];
+
   return (
-    <section id="about" aria-labelledby="about-title" className="section-y">
+    <section id="about" aria-labelledby="about-title" className="section-y relative">
       <div className="container-page">
-        <SectionHeader n="01" label="About" id="about-title" title={about.title} />
+        <Reveal blur={false} y={12}>
+          <span className="pill">
+            <span className="size-1.5 rounded-full bg-violet shadow-[0_0_10px_2px_rgba(167,139,250,0.7)]" />
+            About me
+          </span>
+        </Reveal>
+        <h2 id="about-title" className="sr-only">
+          About
+        </h2>
 
-        {/* Lead + margin notes */}
-        <div className="grid-page mt-16 gap-y-10 md:mt-24">
-          <aside className="col-span-4 space-y-8 md:col-span-2 lg:col-span-3" aria-label="Margin notes">
-            {about.margin.map((m, i) => (
-              <Reveal key={m.k} delay={i * 0.08} className="max-w-[15rem] border-l border-vermilion/60 pl-3">
-                <p className="meta text-vermilion">Note {i + 1}</p>
-                <p className="mt-1.5 text-sm leading-relaxed text-graphite">
-                  <span className="text-ink">{m.k}.</span> {m.v}
-                </p>
-              </Reveal>
-            ))}
-          </aside>
+        <ScrollWords
+          text={about.lead}
+          className="heading-xl mt-10 max-w-[22ch] text-[clamp(1.9rem,4.6vw,3.9rem)] !font-medium !leading-[1.12] !tracking-[-0.03em]"
+        />
 
-          <div className="col-span-4 md:col-span-6 lg:col-span-8">
-            <Reveal>
-              <p className="heading text-[clamp(1.6rem,3.1vw,2.6rem)] leading-[1.18] tracking-[-0.02em] first-letter:float-left first-letter:mr-3 first-letter:mt-[0.06em] first-letter:text-[3.4em] first-letter:leading-[0.8] first-letter:italic first-letter:text-vermilion">
-                {about.lead}
-              </p>
+        {/* Stats */}
+        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-line bg-line md:grid-cols-4">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.08} className="bg-void p-6 md:p-8">
+              <dd className="heading-xl text-[clamp(2.4rem,5vw,3.75rem)] text-gradient">
+                <CountUp to={s.n} />
+                {s.suffix}
+              </dd>
+              <dt className="mt-2 text-sm text-dim">{s.label}</dt>
             </Reveal>
+          ))}
+        </dl>
 
-            <div className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
-              {about.chapters.map((c, i) => (
-                <Reveal key={c.label} delay={i * 0.08} as="article" className="border-t rule pt-4">
-                  <h3 className="meta flex items-baseline gap-2 text-muted">
-                    <span className="text-ink">{String(i + 1).padStart(2, "0")}</span>
-                    {c.label}
-                  </h3>
-                  <p className="mt-4 text-[0.97rem] leading-relaxed text-graphite">{c.body}</p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Trajectory */}
-        <div className="grid-page mt-24 gap-y-8 md:mt-32">
-          <div className="col-span-4 md:col-span-2 lg:col-span-3">
-            <p className="meta text-muted">Trajectory</p>
-          </div>
-          <ol className="col-span-4 md:col-span-6 lg:col-span-9">
-            {timeline.map((t, i) => (
-              <Reveal
-                as="li"
-                key={t.title}
-                delay={i * 0.06}
-                className="group grid grid-cols-[5.5rem_1fr] gap-x-6 border-t rule py-6 last:border-b md:grid-cols-[8rem_1fr_auto]"
-              >
-                <span className="meta pt-1.5 text-muted transition-colors group-hover:text-vermilion">{t.period}</span>
-                <div>
-                  <h3 className="heading text-[1.6rem] leading-tight">{t.title}</h3>
-                  <p className="mt-1 text-sm text-ink">{t.org}</p>
-                  <p className="mt-3 max-w-[40rem] text-[0.95rem] leading-relaxed text-graphite">{t.detail}</p>
-                </div>
-                <span className="meta col-start-2 mt-3 text-muted md:col-start-3 md:mt-1.5">
-                  {t.kind === "research" ? "Research" : "Education"}
-                </span>
-              </Reveal>
-            ))}
-          </ol>
+        {/* Chapters */}
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
+          {about.chapters.map((c, i) => (
+            <Reveal key={c.label} delay={i * 0.1}>
+              <SpotlightCard as="article" className="h-full p-7">
+                <p className="font-mono text-xs text-violet">0{i + 1}</p>
+                <h3 className="font-display mt-4 text-xl font-semibold">{c.label}</h3>
+                <p className="mt-3 text-[0.95rem] leading-relaxed text-dim">{c.body}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
         </div>
 
         {/* Now / Next */}
-        <div className="grid-page mt-24 gap-y-12 md:mt-32">
-          <Reveal className="col-span-4 md:col-span-4 lg:col-span-5 lg:col-start-4">
-            <p className="meta text-muted">Now</p>
-            <ul className="mt-5 space-y-3">
-              {about.now.map((n) => (
-                <li key={n} className="flex gap-3 text-[1.0625rem] leading-snug">
-                  <span aria-hidden className="mt-[0.6em] h-px w-4 shrink-0 bg-vermilion" />
-                  {n}
-                </li>
-              ))}
-            </ul>
+        <div className="mt-6 grid gap-6 md:grid-cols-[1.1fr_1fr]">
+          <Reveal>
+            <SpotlightCard className="h-full p-7 md:p-9">
+              <p className="eyebrow text-iris">Right now</p>
+              <ul className="mt-5 space-y-4">
+                {about.now.map((n) => (
+                  <li key={n} className="flex gap-3 text-[1.02rem] leading-snug">
+                    <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    {n}
+                  </li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </Reveal>
-          <Reveal delay={0.1} className="col-span-4 md:col-span-4 lg:col-span-4 lg:col-start-9">
-            <p className="meta text-muted">Next</p>
-            <p className="heading mt-5 text-[1.5rem] leading-snug italic text-graphite">{about.next}</p>
+          <Reveal delay={0.1}>
+            <div className="relative h-full overflow-hidden rounded-3xl border border-violet/25 bg-gradient-to-br from-violet-deep/25 via-void to-void p-7 md:p-9">
+              <div aria-hidden className="absolute -right-16 -top-16 size-56 rounded-full bg-violet/25 blur-[80px]" />
+              <p className="eyebrow relative text-iris">Where I&rsquo;m headed</p>
+              <p className="font-display relative mt-5 text-[1.3rem] leading-snug">{about.next}</p>
+            </div>
           </Reveal>
         </div>
       </div>
