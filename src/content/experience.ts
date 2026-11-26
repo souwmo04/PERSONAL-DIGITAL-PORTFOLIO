@@ -1,4 +1,4 @@
-import type { TimelineEntry } from "./types";
+import type { Achievement, TimelineEntry } from "./types";
 
 export const timeline: TimelineEntry[] = [
   {
@@ -23,5 +23,44 @@ export const timeline: TimelineEntry[] = [
     org: "North South University, Bangladesh",
     detail: "Expected graduation, December 2026.",
     kind: "education",
+  },
+];
+
+/**
+ * Achievements. Keep wording factual: rank, scope, team.
+ */
+export const achievements: Achievement[] = [
+  {
+    year: "2026",
+    rank: "Champion",
+    rankNote: "Regional",
+    event: "NASA Space Apps Challenge",
+    scope: "Rangpur Region",
+    team: "Team Oblivion",
+  },
+  {
+    year: "2026",
+    rank: "Top 10",
+    rankNote: "Finalist",
+    event: "CyberFrames",
+    scope: "Awarded BDT 30,000",
+    team: "Team Five_step_verification",
+  },
+  {
+    year: "2025",
+    rank: "1st Runner-up",
+    rankNote: "Regional",
+    event: "NASA Space Apps Challenge",
+    scope: "Barishal Region",
+    team: "Team Sirius",
+  },
+  {
+    year: "2025",
+    rank: "Published",
+    rankNote: "Workshop paper",
+    event: "ACL Anthology",
+    scope: "BLP-2025 Workshop, IJCNLP-AACL 2025",
+    detail: "NSU_PiedPiper at BLP-2025 Task 2",
+    href: "/research/nsu-piedpiper-blp-2025",
   },
 ];
