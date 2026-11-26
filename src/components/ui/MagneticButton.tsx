@@ -36,7 +36,7 @@ export function MagneticButton({ href, children, variant = "glow", className = "
 
   const look =
     variant === "glow"
-      ? "bg-gradient-to-r from-violet-deep via-violet to-iris text-void shadow-[0_0_40px_-8px_rgba(167,139,250,0.8)] hover:shadow-[0_0_60px_-6px_rgba(167,139,250,0.95)]"
+      ? "bg-gradient-to-r from-violet-deep via-violet to-iris text-void shadow-[0_0_40px_-8px_color-mix(in_oklab,_var(--color-violet)_80%,_transparent)] hover:shadow-[0_0_60px_-6px_color-mix(in_oklab,_var(--color-violet)_95%,_transparent)]"
       : "border border-line bg-white/[0.03] text-text hover:border-violet/50 hover:bg-violet/10";
 
   const content = (

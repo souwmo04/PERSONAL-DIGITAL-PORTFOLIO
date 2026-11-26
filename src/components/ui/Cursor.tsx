@@ -54,11 +54,12 @@ export function Cursor() {
         animate={{
           width: hover ? 56 : 32,
           height: hover ? 56 : 32,
-          backgroundColor: hover ? "rgba(167,139,250,0.12)" : "rgba(167,139,250,0)",
           scale: down ? 0.85 : 1,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      />
+      >
+        <span className={`absolute inset-0 rounded-full bg-violet/15 transition-opacity duration-300 ${hover ? "opacity-100" : "opacity-0"}`} />
+      </motion.div>
       <motion.div
         className="absolute left-0 top-0 size-1.5 rounded-full bg-iris"
         style={{ x, y, translateX: "-50%", translateY: "-50%" }}

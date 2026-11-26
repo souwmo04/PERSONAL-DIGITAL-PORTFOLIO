@@ -11,7 +11,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/"
-        className="mt-10 rounded-full bg-gradient-to-r from-violet-deep via-violet to-iris px-6 py-3 text-sm font-medium text-void shadow-[0_0_40px_-8px_rgba(167,139,250,0.8)]"
+        className="mt-10 rounded-full bg-gradient-to-r from-violet-deep via-violet to-iris px-6 py-3 text-sm font-medium text-void shadow-[0_0_40px_-8px_color-mix(in_oklab,_var(--color-violet)_80%,_transparent)]"
       >
         Back to home
       </Link>

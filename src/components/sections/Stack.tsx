@@ -16,7 +16,7 @@ function Row({ items, reverse, duration }: { items: string[]; reverse?: boolean;
             aria-hidden={i >= items.length}
             className="flex h-16 items-center gap-3 rounded-2xl glass px-6 text-[0.98rem] font-medium whitespace-nowrap transition-colors hover:border-violet/40 hover:text-iris"
           >
-            <span className="size-1.5 rounded-full bg-violet shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+            <span className="size-1.5 rounded-full bg-violet shadow-[0_0_8px_color-mix(in_oklab,_var(--color-violet)_90%,_transparent)]" />
             {s}
           </li>
         ))}

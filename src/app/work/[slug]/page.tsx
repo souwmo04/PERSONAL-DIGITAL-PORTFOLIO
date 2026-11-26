@@ -138,7 +138,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
               <ul className="space-y-3">
                 {p.contributions.map((c) => (
                   <li key={c} className="flex gap-3 text-[1.02rem] leading-relaxed">
-                    <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_color-mix(in_oklab,_var(--color-violet)_90%,_transparent)]" />
                     {c}
                   </li>
                 ))}

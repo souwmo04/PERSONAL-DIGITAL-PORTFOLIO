@@ -21,7 +21,7 @@ export function SectionTitle({
     <header className={`flex flex-col ${center ? "items-center text-center" : "items-start"}`}>
       <Reveal blur={false} y={12}>
         <span className="pill">
-          <span className="size-1.5 rounded-full bg-violet shadow-[0_0_10px_2px_rgba(167,139,250,0.7)]" />
+          <span className="size-1.5 rounded-full bg-violet shadow-[0_0_10px_2px_color-mix(in_oklab,_var(--color-violet)_70%,_transparent)]" />
           {eyebrow}
         </span>
       </Reveal>

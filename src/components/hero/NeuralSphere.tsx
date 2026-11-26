@@ -13,6 +13,16 @@ import { useEffect, useRef } from "react";
  */
 
 type P3 = { x: number; y: number; z: number };
+type RGB = [number, number, number];
+
+/** Reads a theme colour (hex) from CSS custom properties, so the sphere follows the active theme. */
+function readColor(name: string, fallback: RGB): RGB {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const m = /^#?([0-9a-f]{6})$/i.exec(v);
+  if (!m) return fallback;
+  const n = parseInt(m[1], 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
 
 const N_POINTS = 1200;
 const N_ARCS = 46;
@@ -58,6 +68,24 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
       if (b === a) b = (b + 97) % base.length;
       return { a, b, speed: 0.12 + rnd() * 0.25, offset: rnd() };
     });
+
+    // Theme colours, re-read whenever <html data-theme> changes.
+    let deep: RGB = [124, 58, 237];
+    let light: RGB = [204, 208, 249];
+    let mid: RGB = [167, 139, 250];
+    let accent: RGB = [103, 232, 249];
+    const loadColors = () => {
+      deep = readColor("--color-violet-deep", deep);
+      light = readColor("--color-iris", light);
+      mid = readColor("--color-violet", mid);
+      accent = readColor("--color-aqua", accent);
+    };
+    loadColors();
+    const themeObserver = new MutationObserver(() => {
+      loadColors();
+      if (reduce) draw(2000);
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     let W = 0;
     let H = 0;
@@ -133,9 +161,9 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
         const size = 0.5 + depth * 1.5;
         const alpha = 0.12 + depth * 0.75;
         // Violet at the back, pale iris/aqua at the front.
-        const r = Math.round(124 + depth * 80);
-        const g = Math.round(58 + depth * 150);
-        const b = Math.round(237 + depth * 12);
+        const r = Math.round(deep[0] + (light[0] - deep[0]) * depth);
+        const g = Math.round(deep[1] + (light[1] - deep[1]) * depth);
+        const b = Math.round(deep[2] + (light[2] - deep[2]) * depth);
         ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
         ctx.beginPath();
         ctx.arc(px, py, size, 0, Math.PI * 2);
@@ -151,7 +179,7 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
         if (depth < 0.35) continue;
         const mx = (A.x + B.x) / 2 + (ox - (A.x + B.x) / 2) * -0.25;
         const my = (A.y + B.y) / 2 + (oy - (A.y + B.y) / 2) * -0.25;
-        ctx.strokeStyle = `rgba(167,139,250,${0.05 + depth * 0.18})`;
+        ctx.strokeStyle = `rgba(${mid[0]},${mid[1]},${mid[2]},${0.05 + depth * 0.18})`;
         ctx.beginPath();
         ctx.moveTo(A.x, A.y);
         ctx.quadraticCurveTo(mx, my, B.x, B.y);
@@ -161,8 +189,8 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
         const qx = (1 - k) * (1 - k) * A.x + 2 * (1 - k) * k * mx + k * k * B.x;
         const qy = (1 - k) * (1 - k) * A.y + 2 * (1 - k) * k * my + k * k * B.y;
         const glow = ctx.createRadialGradient(qx, qy, 0, qx, qy, 7);
-        glow.addColorStop(0, `rgba(103,232,249,${0.5 * depth + 0.2})`);
-        glow.addColorStop(1, "rgba(103,232,249,0)");
+        glow.addColorStop(0, `rgba(${accent[0]},${accent[1]},${accent[2]},${0.5 * depth + 0.2})`);
+        glow.addColorStop(1, `rgba(${accent[0]},${accent[1]},${accent[2]},0)`);
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.arc(qx, qy, 7, 0, Math.PI * 2);
@@ -187,6 +215,7 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
+      themeObserver.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
   }, []);

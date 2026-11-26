@@ -56,7 +56,7 @@ export function VelocityMarquee({
                 <span key={`${copy}-${i}`} className="flex items-center">
                   <span
                     className={`heading-xl px-6 text-[clamp(2.5rem,7vw,5.5rem)] ${
-                      i % 2 ? "text-transparent [-webkit-text-stroke:1.5px_rgba(196,181,253,0.55)]" : "text-gradient"
+                      i % 2 ? "text-transparent [-webkit-text-stroke:1.5px_color-mix(in_oklab,_var(--color-iris)_55%,_transparent)]" : "text-gradient"
                     }`}
                   >
                     {w}

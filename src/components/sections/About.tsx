@@ -21,7 +21,7 @@ export function About() {
       <div className="container-page">
         <Reveal blur={false} y={12}>
           <span className="pill">
-            <span className="size-1.5 rounded-full bg-violet shadow-[0_0_10px_2px_rgba(167,139,250,0.7)]" />
+            <span className="size-1.5 rounded-full bg-violet shadow-[0_0_10px_2px_color-mix(in_oklab,_var(--color-violet)_70%,_transparent)]" />
             About me
           </span>
         </Reveal>
@@ -72,7 +72,7 @@ export function About() {
               <ul className="mt-5 space-y-4">
                 {about.now.map((n) => (
                   <li key={n} className="flex gap-3 text-[1.02rem] leading-snug">
-                    <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_color-mix(in_oklab,_var(--color-violet)_90%,_transparent)]" />
                     {n}
                   </li>
                 ))}
