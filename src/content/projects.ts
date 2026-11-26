@@ -51,6 +51,33 @@ export const projects: Project[] = [
     visual: "dashlens",
     links: {},
   },
+  {
+    slug: "meditalk-ai",
+    index: "B",
+    title: "Meditalk AI",
+    tagline: "A healthcare assistant you can talk to, or show a prescription.",
+    description:
+      "An AI-powered healthcare assistant with conversational guidance, voice interaction and document reading.",
+    kind: "Full-stack application",
+    areas: ["Conversational AI", "Speech", "OCR", "Healthcare"],
+    problem:
+      "Medical information is everywhere, but it is hard to use. Prescriptions and reports are handwritten or dense. Typing symptoms is a barrier for many people, and general chatbots don't keep the context of a person's own documents.",
+    approach: [
+      "A conversational assistant built on the Gemini API, prompted to give general guidance and to send people to clinicians, not to diagnose.",
+      "Speech input and output, so people can talk to it instead of typing.",
+      "OCR for prescriptions and medical reports, so the assistant can explain what a document says.",
+      "A FastAPI backend with MongoDB that keeps conversation history and uploaded documents for each user.",
+    ],
+    features: [
+      { title: "Talk, don't type", detail: "Speech-to-text input and spoken replies." },
+      { title: "Read the paperwork", detail: "OCR turns prescriptions and reports into text the assistant can explain." },
+      { title: "Remembers context", detail: "History is stored, so follow-up questions make sense." },
+      { title: "Knows its limits", detail: "Guidance, not diagnosis, with clear prompts to see a professional." },
+    ],
+    stack: ["FastAPI", "React", "MongoDB", "Gemini API", "Speech recognition", "OCR"],
+    visual: "meditalk",
+    links: {},
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
