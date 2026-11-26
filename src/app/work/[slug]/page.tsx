@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
-import { ProjectFigure, ProjectScreenshots } from "@/components/projects/ProjectFigure";
-import { ProjectLinks } from "@/components/projects/ProjectLinks";
+import { ProjectArt } from "@/components/projects/ProjectArt";
 import { Reveal } from "@/components/motion/Reveal";
+import { BlurChars } from "@/components/motion/Text";
+import { OutLink, PageShell } from "@/components/ui/PageShell";
 
 export const dynamicParams = false;
 
@@ -26,11 +28,11 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
 
 function Block({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
-    <Reveal as="section" aria-labelledby={id} className="grid-page gap-y-4 border-t rule pt-6">
-      <h2 id={id} className="meta col-span-4 text-muted md:col-span-2 lg:col-span-3">
+    <Reveal as="section" aria-labelledby={id} className="grid gap-4 border-t border-line pt-8 md:grid-cols-[12rem_1fr] md:gap-10">
+      <h2 id={id} className="eyebrow pt-1 text-iris">
         {label}
       </h2>
-      <div className="col-span-4 md:col-span-6 lg:col-span-8">{children}</div>
+      <div>{children}</div>
     </Reveal>
   );
 }
@@ -39,59 +41,52 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
   const { slug } = await params;
   const p = getProject(slug);
   if (!p) notFound();
-
   const i = projects.findIndex((x) => x.slug === p.slug);
   const next = projects[(i + 1) % projects.length];
-  const dark = p.visual === "spectra";
 
   return (
-    <article className="pb-24 pt-28 md:pt-36">
-      <div className="container-page">
-        <Link href="/#work" className="meta group inline-flex items-center gap-2 text-muted hover:text-ink">
-          <ArrowLeft aria-hidden className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
-          Selected work
-        </Link>
-
-        <header className="grid-page mt-10 gap-y-8 border-t border-ink pt-6">
-          <div className="meta col-span-4 space-y-1 text-muted md:col-span-2 lg:col-span-3">
-            <p className="text-vermilion">Project {p.index}</p>
-            <p>{p.kind}</p>
+    <PageShell back="/#work" backLabel="All projects">
+      <article>
+        <header className="mt-10">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="pill">{p.kind}</span>
+            <span className="font-mono text-xs text-dim">Project {p.index}</span>
           </div>
-          <div className="col-span-4 md:col-span-6 lg:col-span-9">
-            <h1 className="display text-[clamp(3.5rem,11vw,9rem)]">{p.title}</h1>
-            <p className="heading mt-6 max-w-[28ch] text-[clamp(1.5rem,3vw,2.4rem)] leading-[1.12] italic text-graphite">
-              {p.tagline}
-            </p>
-            <p className="mt-6 max-w-[40rem] text-[1.0625rem] leading-relaxed">{p.description}</p>
+          <h1 className="heading-xl mt-6 text-[clamp(3.25rem,10vw,8rem)]">
+            <BlurChars text={p.title} className="text-gradient" />
+          </h1>
+          <Reveal delay={0.25}>
+            <p className="font-display mt-6 max-w-3xl text-[clamp(1.3rem,2.6vw,2rem)] leading-snug text-text/90">{p.tagline}</p>
+            <p className="mt-5 max-w-2xl text-[1.0625rem] leading-relaxed text-dim">{p.description}</p>
             <ul className="mt-6 flex flex-wrap gap-2" aria-label="Research areas">
               {p.areas.map((a) => (
-                <li key={a} className="meta border rule px-2 py-1 text-graphite">
+                <li key={a} className="chip">
                   {a}
                 </li>
               ))}
             </ul>
-            <ProjectLinks project={p} showCase={false} className="mt-8" />
-          </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {p.links.github ? <OutLink href={p.links.github}>GitHub</OutLink> : null}
+              {p.links.paper ? <OutLink href={p.links.paper}>Paper</OutLink> : null}
+              {p.links.demo ? <OutLink href={p.links.demo}>Live demo</OutLink> : null}
+            </div>
+          </Reveal>
         </header>
 
-        <Reveal as="figure" className={`mt-16 md:mt-24 ${dark ? "bg-ink p-6 text-paper sm:p-10" : "border rule bg-paper-2/50 p-4 sm:p-10"}`}>
-          <ProjectFigure project={p} />
-          <figcaption className={`mt-6 text-sm ${dark ? "text-fog" : "text-graphite"}`}>
-            <span className={`meta mr-2 ${dark ? "text-paper" : "text-ink"}`}>Fig. 1</span>
-            Illustrative figure drawn for this page. It is not a product screenshot.
-          </figcaption>
+        <Reveal className="group mt-16 overflow-hidden rounded-[2rem] border border-line">
+          <ProjectArt visual={p.visual} className="aspect-[16/9] md:aspect-[21/9]" />
         </Reveal>
 
-        <div className="mt-20 space-y-16 md:mt-28">
+        <div className="mt-20 space-y-14">
           <Block id="problem" label="Problem">
-            <p className="heading text-[clamp(1.4rem,2.4vw,1.9rem)] leading-snug">{p.problem}</p>
+            <p className="font-display text-[clamp(1.25rem,2.2vw,1.65rem)] leading-snug">{p.problem}</p>
           </Block>
 
           <Block id="approach" label="Technical approach">
-            <ol className="space-y-4">
+            <ol className="space-y-3">
               {p.approach.map((a, n) => (
-                <li key={n} className="grid grid-cols-[2rem_1fr] text-[1.0625rem] leading-relaxed">
-                  <span className="meta pt-1.5 text-vermilion">{String(n + 1).padStart(2, "0")}</span>
+                <li key={n} className="flex gap-4 rounded-2xl glass p-5 text-[1.02rem] leading-relaxed">
+                  <span className="font-mono text-sm text-violet">0{n + 1}</span>
                   <span>{a}</span>
                 </li>
               ))}
@@ -100,12 +95,15 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
           {p.pipeline ? (
             <Block id="architecture" label="Architecture">
-              <ol className="grid border-t border-ink sm:grid-flow-col sm:auto-cols-fr">
+              <ol className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
                 {p.pipeline.map((s, n) => (
-                  <li key={s.label} className="relative border-b rule py-4 sm:border-b-0 sm:border-r sm:px-4 sm:first:pl-0 sm:last:border-r-0">
-                    <span className="meta text-vermilion">{String(n + 1).padStart(2, "0")}</span>
-                    <p className="heading mt-2 text-[1.3rem]">{s.label}</p>
-                    <p className="mt-1 text-sm text-graphite">{s.detail}</p>
+                  <li key={s.label} className="relative flex-1 rounded-2xl border border-violet/20 bg-violet/[0.06] p-4">
+                    <span className="font-mono text-xs text-violet">0{n + 1}</span>
+                    <p className="font-display mt-2 font-semibold">{s.label}</p>
+                    <p className="mt-1 text-sm text-dim">{s.detail}</p>
+                    {n < p.pipeline!.length - 1 ? (
+                      <ArrowRight aria-hidden className="absolute -right-3 top-1/2 z-10 hidden size-4 -translate-y-1/2 text-iris sm:block" />
+                    ) : null}
                   </li>
                 ))}
               </ol>
@@ -114,11 +112,11 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
           {p.features ? (
             <Block id="features" label="Features">
-              <dl className="grid gap-x-8 sm:grid-cols-2">
+              <dl className="grid gap-3 sm:grid-cols-2">
                 {p.features.map((f) => (
-                  <div key={f.title} className="border-t rule py-4 first:border-t-0 sm:[&:nth-child(2)]:border-t-0">
-                    <dt className="font-medium">{f.title}</dt>
-                    <dd className="mt-1.5 text-[0.97rem] leading-relaxed text-graphite">{f.detail}</dd>
+                  <div key={f.title} className="rounded-2xl glass p-5">
+                    <dt className="font-display font-semibold">{f.title}</dt>
+                    <dd className="mt-1.5 text-[0.95rem] leading-relaxed text-dim">{f.detail}</dd>
                   </div>
                 ))}
               </dl>
@@ -129,8 +127,8 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
             <Block id="contributions" label="Contributions">
               <ul className="space-y-3">
                 {p.contributions.map((c) => (
-                  <li key={c} className="flex gap-3 text-[1.0625rem] leading-relaxed">
-                    <span aria-hidden className="mt-[0.75em] h-px w-4 shrink-0 bg-vermilion" />
+                  <li key={c} className="flex gap-3 text-[1.02rem] leading-relaxed">
+                    <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-violet shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
                     {c}
                   </li>
                 ))}
@@ -140,14 +138,14 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
           {p.evaluation ? (
             <Block id="evaluation" label="Experiments">
-              <p className="text-[1.0625rem] leading-relaxed text-graphite">{p.evaluation}</p>
+              <p className="text-[1.02rem] leading-relaxed text-dim">{p.evaluation}</p>
             </Block>
           ) : null}
 
           <Block id="stack" label="Technology stack">
-            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            <ul className="flex flex-wrap gap-2">
               {p.stack.map((s) => (
-                <li key={s} className="heading text-[1.6rem]">
+                <li key={s} className="rounded-full border border-line bg-white/[0.03] px-4 py-2 text-sm">
                   {s}
                 </li>
               ))}
@@ -156,24 +154,40 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
           {p.screenshots?.length ? (
             <Block id="screens" label="Screens">
-              <ProjectScreenshots project={p} />
+              <div className="grid gap-6 md:grid-cols-2">
+                {p.screenshots.map((s) => (
+                  <figure key={s.src}>
+                    <Image
+                      src={s.src}
+                      alt={s.alt}
+                      width={s.width}
+                      height={s.height}
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="h-auto w-full rounded-2xl border border-line"
+                    />
+                    <figcaption className="mt-2 text-sm text-dim">{s.alt}</figcaption>
+                  </figure>
+                ))}
+              </div>
             </Block>
           ) : null}
         </div>
 
         <Link
           href={`/work/${next.slug}`}
-          className="group mt-28 flex items-end justify-between gap-6 border-t border-ink pt-6"
+          className="group mt-28 flex items-center justify-between gap-6 overflow-hidden rounded-[2rem] glass p-8 transition-colors hover:border-violet/40 md:p-12"
         >
           <span>
-            <span className="meta text-muted">Next project · {next.index}</span>
-            <span className="display mt-3 block text-[clamp(2.5rem,7vw,5.5rem)] transition-colors group-hover:text-vermilion">
+            <span className="eyebrow text-faint">Next project</span>
+            <span className="heading-xl mt-3 block text-[clamp(2.25rem,6vw,4.5rem)] transition-colors group-hover:text-iris">
               {next.title}
             </span>
           </span>
-          <ArrowRight aria-hidden className="mb-4 size-8 shrink-0 transition-transform group-hover:translate-x-2" strokeWidth={1.25} />
+          <span className="grid size-14 shrink-0 place-items-center rounded-full border border-line transition-all duration-500 group-hover:border-violet group-hover:bg-violet group-hover:text-void">
+            <ArrowRight aria-hidden className="size-5 transition-transform duration-500 group-hover:translate-x-0.5" />
+          </span>
         </Link>
-      </div>
-    </article>
+      </article>
+    </PageShell>
   );
 }
