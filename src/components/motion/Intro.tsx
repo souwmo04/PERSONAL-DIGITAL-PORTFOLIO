@@ -77,24 +77,29 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
     setWord(NAME);
     setOutlined([]);
     setProgress(100);
-    setPhase("exit");
-    document.documentElement.classList.remove("intro-active");
+    const html = document.documentElement;
+    html.classList.add("intro-landing");
+    html.classList.remove("intro-active");
     window.__lenis?.start();
+    setPhase("exit");
 
-    // Fly the wordmark to the nav logo.
+    // Fly the wordmark onto the nav logo: match widths for scale, centres for position.
     const target = document.querySelector<HTMLElement>("[data-nav-logo]")?.getBoundingClientRect();
     const own = wordRef.current?.getBoundingClientRect();
-    if (target && own && own.height > 0) {
-      const scale = target.height / own.height;
+    if (target && own && own.width > 0) {
+      const scale = target.width / own.width;
       await controls.start({
         x: target.left - own.left,
-        y: target.top - own.top,
+        y: target.top + target.height / 2 - (own.top + (own.height * scale) / 2),
         scale,
         transition: { duration: EXIT_MS / 1000, ease: EASE },
       });
     } else {
       await new Promise((r) => setTimeout(r, EXIT_MS));
     }
+    // Cross-fade: reveal the real nav logo, fade the flying copy out, then unmount.
+    html.classList.remove("intro-landing");
+    await controls.start({ opacity: 0, transition: { duration: 0.3 } });
     setPhase("done");
   }, [controls]);
 
@@ -149,7 +154,7 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
   return (
     <IntroContext.Provider value={phase !== "show"}>
       {phase !== "done" ? (
-        <div data-intro className="fixed inset-0 z-[150]" onClick={exit} role="status" aria-live="polite" aria-label="Loading Fahim Foysal's portfolio">
+        <div data-intro className={`fixed inset-0 z-[150] ${phase === "exit" ? "pointer-events-none" : ""}`} onClick={exit} role="status" aria-live="polite" aria-label="Loading Fahim Foysal's portfolio">
           {/* Sheet */}
           <motion.div
             className="absolute inset-0 cursor-pointer"
