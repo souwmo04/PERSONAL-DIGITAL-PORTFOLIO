@@ -73,6 +73,9 @@ export function Hero() {
             <BlurChars text="Fahim" play={ready} delay={0.2} className="block" />
             <BlurChars text="Foysal" play={ready} delay={0.42} className="block text-gradient" />
           </h1>
+          <motion.p {...fadeIn(0.8)} className="mt-4 font-mono text-xs uppercase tracking-[0.22em] text-faint">
+            a.k.a. <span className="text-iris">{site.nickname}</span>
+          </motion.p>
         </div>
 
         {/* Mobile: leave room for the sphere under the name */}
