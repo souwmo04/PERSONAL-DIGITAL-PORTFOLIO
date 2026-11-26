@@ -1,31 +1,19 @@
 import type { Publication } from "@/content/types";
 
-/** Reported results as a small academic table ("Table 1"). */
-export function ResultsTable({ results, caption }: { results: NonNullable<Publication["results"]>; caption?: string }) {
+/** Reported results as small stat tiles, copied from the paper. */
+export function ResultsTable({ results }: { results: NonNullable<Publication["results"]> }) {
   return (
     <figure>
-      <table className="w-full border-collapse text-left text-sm">
-        <caption className="mb-3 caption-top text-left text-sm text-graphite">
-          <span className="meta mr-2 text-ink">Table 1</span>
-          {caption ?? "Results as reported in the paper."}
-        </caption>
-        <thead>
-          <tr className="border-y border-ink">
-            <th scope="col" className="meta py-2 pr-4 font-normal text-muted">Setting</th>
-            <th scope="col" className="meta py-2 pr-4 font-normal text-muted">Note</th>
-            <th scope="col" className="meta py-2 text-right font-normal text-muted">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((r, i) => (
-            <tr key={r.label} className={i === results.length - 1 ? "border-b border-ink" : "border-b rule"}>
-              <th scope="row" className="py-2.5 pr-4 font-normal">{r.label}</th>
-              <td className="py-2.5 pr-4 text-graphite">{r.note}</td>
-              <td className="heading py-2.5 text-right text-[1.35rem] tabular-nums">{r.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <figcaption className="eyebrow mb-3 text-faint">Results as reported in the paper</figcaption>
+      <dl className="grid gap-3 sm:grid-cols-3">
+        {results.map((r) => (
+          <div key={r.label} className="rounded-2xl border border-line bg-white/[0.02] p-4">
+            <dd className="heading-xl text-[2rem] text-gradient">{r.value}</dd>
+            <dt className="mt-2 text-sm text-text">{r.label}</dt>
+            {r.note ? <p className="mt-1 text-xs text-faint">{r.note}</p> : null}
+          </div>
+        ))}
+      </dl>
     </figure>
   );
 }

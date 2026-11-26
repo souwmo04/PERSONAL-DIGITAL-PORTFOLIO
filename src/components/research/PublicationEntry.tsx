@@ -1,110 +1,131 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { Plus } from "lucide-react";
+import { ArrowUpRight, FileText, Plus } from "lucide-react";
+import Link from "next/link";
 import { useId, useState } from "react";
 import type { Publication } from "@/content/types";
-import { ArrowLink } from "@/components/ui/ArrowLink";
 import { AuthorList } from "./AuthorList";
 import { BibtexBlock } from "./BibtexBlock";
 import { ResultsTable } from "./ResultsTable";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** A publication typeset like a reference entry, with expandable detail. */
+function LinkBtn({ href, children }: { href: string; children: React.ReactNode }) {
+  const external = href.startsWith("http");
+  const cls =
+    "group inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-4 py-2 text-sm transition-colors hover:border-violet/50 hover:text-iris";
+  const icon = <ArrowUpRight aria-hidden className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />;
+  return external ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+      {children}
+      {icon}
+      <span className="sr-only">(opens in a new tab)</span>
+    </a>
+  ) : (
+    <Link href={href} className={cls}>
+      {children}
+      {icon}
+    </Link>
+  );
+}
+
+/** A publication as a glowing glass card, with expandable contributions, results and citation. */
 export function PublicationEntry({ pub, index }: { pub: Publication; index: number }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
   return (
-    <article className="grid-page border-t border-ink pt-6" aria-labelledby={`${panelId}-title`}>
-      {/* Margin: index, year, venue */}
-      <div className="col-span-4 mb-6 flex items-baseline gap-4 md:col-span-2 md:block lg:col-span-3">
-        <span className="heading text-[3.5rem] leading-none italic text-vermilion md:text-[4.5rem]">[{index}]</span>
-        <div className="meta space-y-1 text-muted md:mt-4">
-          <p className="text-ink">{pub.year}</p>
-          <p>{pub.venueShort}</p>
-          {pub.pages ? <p>pp. {pub.pages}</p> : null}
-        </div>
+    <article
+      aria-labelledby={`${panelId}-t`}
+      className="relative overflow-hidden rounded-[2rem] border border-violet/20 bg-gradient-to-b from-violet-deep/[0.12] to-white/[0.01] p-7 md:p-12"
+    >
+      <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-violet/20 blur-[100px]" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-32 left-10 size-72 rounded-full bg-aqua/10 blur-[110px]" />
+
+      <div className="relative flex flex-wrap items-center gap-3">
+        <span className="font-mono text-sm text-violet">{String(index).padStart(2, "0")}</span>
+        <span className="pill">
+          <FileText aria-hidden className="size-3" /> {pub.venueShort}
+        </span>
+        <span className="font-mono text-xs text-dim">
+          {pub.year}
+          {pub.pages ? ` · pp. ${pub.pages}` : ""}
+        </span>
       </div>
 
-      <div className="col-span-4 md:col-span-6 lg:col-span-9">
-        <div className="flex flex-wrap gap-2">
-          {pub.tags.map((t) => (
-            <span key={t} className="meta border rule px-2 py-1 text-graphite">
-              {t}
-            </span>
-          ))}
-        </div>
+      <h3 id={`${panelId}-t`} className="font-display relative mt-6 max-w-4xl text-[clamp(1.5rem,3vw,2.4rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+        {pub.title}
+      </h3>
+      <AuthorList authors={pub.authors} className="relative mt-5 text-[0.98rem] text-dim" />
+      <p className="relative mt-2 text-sm italic text-faint">
+        {pub.venue}. {pub.publisher}
+        {pub.location ? `, ${pub.location}` : ""}.
+      </p>
 
-        <h3 id={`${panelId}-title`} className="heading mt-5 max-w-[24ch] text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05]">
-          {pub.title}
-        </h3>
+      <p className="relative mt-7 max-w-3xl text-[1.0625rem] leading-relaxed text-text/90">{pub.summary}</p>
 
-        <AuthorList authors={pub.authors} className="mt-5 text-[0.98rem] text-graphite" />
-        <p className="mt-2 text-sm italic text-graphite">
-          {pub.venue}. {pub.publisher}
-          {pub.location ? `, ${pub.location}` : ""}, {pub.month ? `${pub.month} ` : ""}
-          {pub.year}.
-        </p>
+      <div className="relative mt-6 flex flex-wrap gap-2">
+        {pub.tags.map((t) => (
+          <span key={t} className="chip">
+            {t}
+          </span>
+        ))}
+      </div>
 
-        <p className="mt-6 max-w-[42rem] text-[1.0625rem] leading-relaxed">{pub.summary}</p>
+      <div className="relative mt-8 flex flex-wrap items-center gap-3">
+        {pub.links.paper ? <LinkBtn href={pub.links.paper}>ACL Anthology</LinkBtn> : null}
+        {pub.links.pdf ? <LinkBtn href={pub.links.pdf}>PDF</LinkBtn> : null}
+        {pub.links.code ? <LinkBtn href={pub.links.code}>Code</LinkBtn> : null}
+        <LinkBtn href={`/research/${pub.slug}`}>Paper notes</LinkBtn>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex items-center gap-2 rounded-full bg-violet/15 px-4 py-2 text-sm text-iris transition-colors hover:bg-violet/25 sm:ml-auto"
+        >
+          <Plus aria-hidden className={`size-4 transition-transform duration-500 ${open ? "rotate-45" : ""}`} />
+          {open ? "Hide details" : "Contributions & results"}
+        </button>
+      </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3 text-[0.95rem]">
-          {pub.links.paper ? <ArrowLink href={pub.links.paper}>ACL Anthology</ArrowLink> : null}
-          {pub.links.pdf ? <ArrowLink href={pub.links.pdf}>PDF</ArrowLink> : null}
-          {pub.links.code ? <ArrowLink href={pub.links.code}>Code</ArrowLink> : null}
-          <ArrowLink href={`/research/${pub.slug}`}>Paper notes</ArrowLink>
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={panelId}
-            onClick={() => setOpen((v) => !v)}
-            className="meta ml-auto inline-flex items-center gap-2 border-b border-ink pb-1 transition-colors hover:text-vermilion"
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            id={panelId}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="relative overflow-hidden"
           >
-            <Plus aria-hidden className={`size-3.5 transition-transform duration-300 ${open ? "rotate-45" : ""}`} />
-            {open ? "Hide details" : "Contributions & results"}
-          </button>
-        </div>
-
-        <AnimatePresence initial={false}>
-          {open ? (
-            <motion.div
-              id={panelId}
-              key="panel"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.55, ease: EASE }}
-              className="overflow-hidden"
-            >
-              <div className="grid gap-10 pt-10 lg:grid-cols-2">
-                <div>
-                  {pub.context ? (
-                    <>
-                      <p className="meta text-muted">Setting</p>
-                      <p className="mt-3 text-[0.97rem] leading-relaxed text-graphite">{pub.context}</p>
-                    </>
-                  ) : null}
-                  <p className="meta mt-8 text-muted">Contributions</p>
-                  <ol className="mt-3 space-y-3">
-                    {pub.contributions.map((c, i) => (
-                      <li key={i} className="grid grid-cols-[1.75rem_1fr] text-[0.97rem] leading-relaxed">
-                        <span className="meta pt-1 text-vermilion">{String(i + 1).padStart(2, "0")}</span>
-                        <span>{c}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-                <div className="space-y-8">
-                  {pub.results ? <ResultsTable results={pub.results} /> : null}
-                  <BibtexBlock bibtex={pub.bibtex} />
-                </div>
+            <div className="grid gap-10 border-t border-line pt-10 mt-10 lg:grid-cols-2">
+              <div>
+                {pub.context ? (
+                  <>
+                    <p className="eyebrow text-faint">Setting</p>
+                    <p className="mt-3 text-[0.97rem] leading-relaxed text-dim">{pub.context}</p>
+                  </>
+                ) : null}
+                <p className="eyebrow mt-8 text-faint">Contributions</p>
+                <ol className="mt-4 space-y-3">
+                  {pub.contributions.map((c, i) => (
+                    <li key={i} className="flex gap-3 text-[0.97rem] leading-relaxed">
+                      <span className="font-mono text-xs text-violet pt-1">0{i + 1}</span>
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ol>
               </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-      </div>
+              <div className="space-y-8">
+                {pub.results ? <ResultsTable results={pub.results} /> : null}
+                <BibtexBlock bibtex={pub.bibtex} />
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </article>
   );
 }
