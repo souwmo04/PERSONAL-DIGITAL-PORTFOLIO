@@ -3,15 +3,16 @@
 The personal site of **Fahim Foysal**: AI researcher, machine learning engineer and software developer
 (TriModal AI Lab, North South University).
 
-The design is an editorial "research notebook" system. Sections are numbered like a paper, visuals are
-captioned as figures, and notes sit in the margin. The design direction, palette, type, grid and motion
-rules are in [DESIGN.md](DESIGN.md).
+The design is a dark, cinematic, motion-led system called "Nocturne". It has a breathing neural-sphere
+hero, inertial smooth scrolling, blur-in type, a scroll-filled career timeline, spotlight glass cards
+and a tech-stack marquee. The palette, type and every motion pattern are documented in
+[DESIGN.md](DESIGN.md).
 
 ## Stack
 
 - Next.js 16 (App Router), React 19, TypeScript
 - Tailwind CSS v4 (design tokens in `src/app/globals.css`)
-- Motion for React, for animation (it respects `prefers-reduced-motion`)
+- Motion for React, for animation, and Lenis, for smooth scrolling (both respect `prefers-reduced-motion`)
 - Lucide React, for icons
 - No backend, no database. Every page is generated statically.
 
@@ -38,7 +39,7 @@ All content lives in typed data files. You don't need to touch a component to up
 
 ## Pages
 
-- `/`: the index (hero, about, research, work, record, toolkit, contact)
+- `/`: home (hero, about, career, awards, research, projects, stack, contact)
 - `/research/[slug]`: paper notes with contributions, results and BibTeX
 - `/work/[slug]`: project case studies
 - `/cv`: a printable CV
