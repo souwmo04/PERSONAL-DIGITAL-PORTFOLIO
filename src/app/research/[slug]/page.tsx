@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { publications } from "@/content/publications";
 import { AuthorList } from "@/components/research/AuthorList";
 import { BibtexBlock } from "@/components/research/BibtexBlock";
 import { ResultsTable } from "@/components/research/ResultsTable";
-import { ArrowLink } from "@/components/ui/ArrowLink";
 import { Reveal } from "@/components/motion/Reveal";
+import { BlurChars } from "@/components/motion/Text";
+import { OutLink, PageShell } from "@/components/ui/PageShell";
 
 export const dynamicParams = false;
 
@@ -32,7 +31,7 @@ export default async function PublicationPage({ params }: PageProps<"/research/[
   const pub = publications.find((p) => p.slug === slug);
   if (!pub) notFound();
 
-  const scholarlyJsonLd = {
+  const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ScholarlyArticle",
     headline: pub.title,
@@ -45,71 +44,66 @@ export default async function PublicationPage({ params }: PageProps<"/research/[
   };
 
   return (
-    <article className="pb-24 pt-28 md:pt-36">
-      <div className="container-page">
-        <Link href="/#research" className="meta group inline-flex items-center gap-2 text-muted hover:text-ink">
-          <ArrowLeft aria-hidden className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
-          Research
-        </Link>
-
-        <header className="grid-page mt-10 gap-y-8 border-t border-ink pt-6">
-          <div className="meta col-span-4 space-y-1 text-muted md:col-span-2 lg:col-span-3">
-            <p className="text-vermilion">Paper notes</p>
-            <p className="text-ink">{pub.year}</p>
-            <p>{pub.venueShort}</p>
-            {pub.pages ? <p>pp. {pub.pages}</p> : null}
-            {pub.anthologyId ? <p>ID {pub.anthologyId}</p> : null}
+    <PageShell back="/#research" backLabel="Research">
+      <article>
+        <header className="mt-10 max-w-5xl">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="pill">Paper notes</span>
+            <span className="font-mono text-xs text-dim">
+              {pub.venueShort} · {pub.year}
+              {pub.pages ? ` · pp. ${pub.pages}` : ""}
+            </span>
           </div>
-          <div className="col-span-4 md:col-span-6 lg:col-span-9">
-            <h1 className="heading text-[clamp(2.1rem,5vw,4.25rem)] leading-[1.02]">{pub.title}</h1>
-            <AuthorList authors={pub.authors} className="mt-6 text-[1.05rem] text-graphite" />
-            <p className="mt-2 text-sm italic text-graphite">
+          <h1 className="font-display mt-7 text-[clamp(2rem,4.6vw,3.75rem)] font-semibold leading-[1.08] tracking-[-0.03em]">
+            <BlurChars text={pub.title} stagger={0.008} />
+          </h1>
+          <Reveal delay={0.3}>
+            <AuthorList authors={pub.authors} className="mt-7 text-[1.05rem] text-dim" />
+            <p className="mt-2 text-sm italic text-faint">
               {pub.venue}. {pub.publisher}
               {pub.location ? `, ${pub.location}` : ""}, {pub.month ? `${pub.month} ` : ""}
-              {pub.year}.
-              {pub.doi ? ` DOI ${pub.doi}.` : ""}
+              {pub.year}.{pub.doi ? ` DOI ${pub.doi}.` : ""}
             </p>
-            <p className="mt-8 flex flex-wrap gap-x-7 gap-y-2 text-[0.95rem]">
-              {pub.links.paper ? <ArrowLink href={pub.links.paper}>ACL Anthology</ArrowLink> : null}
-              {pub.links.pdf ? <ArrowLink href={pub.links.pdf}>PDF</ArrowLink> : null}
-              {pub.links.doi ? <ArrowLink href={pub.links.doi}>DOI</ArrowLink> : null}
-              {pub.links.code ? <ArrowLink href={pub.links.code}>Code</ArrowLink> : null}
-            </p>
-          </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {pub.links.paper ? <OutLink href={pub.links.paper}>ACL Anthology</OutLink> : null}
+              {pub.links.pdf ? <OutLink href={pub.links.pdf}>PDF</OutLink> : null}
+              {pub.links.doi ? <OutLink href={pub.links.doi}>DOI</OutLink> : null}
+              {pub.links.code ? <OutLink href={pub.links.code}>Code</OutLink> : null}
+            </div>
+          </Reveal>
         </header>
 
-        <div className="grid-page mt-20 gap-y-14">
-          <aside className="col-span-4 md:col-span-2 lg:col-span-3">
-            <p className="meta text-muted">On this page</p>
-            <ul className="mt-3 space-y-1.5 text-sm">
-              {pub.context ? <li><a className="link-draw" href="#setting">Setting</a></li> : null}
-              <li><a className="link-draw" href="#summary">Summary</a></li>
-              <li><a className="link-draw" href="#contributions">Contributions</a></li>
-              {pub.results ? <li><a className="link-draw" href="#results">Results</a></li> : null}
-              <li><a className="link-draw" href="#cite">Cite</a></li>
+        <div className="mt-20 grid gap-12 lg:grid-cols-[14rem_1fr]">
+          <nav aria-label="On this page" className="hidden lg:block">
+            <ul className="sticky top-28 space-y-2 border-l border-line pl-4 text-sm text-dim">
+              {pub.context ? <li><a className="hover:text-iris" href="#setting">Setting</a></li> : null}
+              <li><a className="hover:text-iris" href="#summary">Summary</a></li>
+              <li><a className="hover:text-iris" href="#contributions">Contributions</a></li>
+              {pub.results ? <li><a className="hover:text-iris" href="#results">Results</a></li> : null}
+              <li><a className="hover:text-iris" href="#cite">Cite</a></li>
             </ul>
-          </aside>
+          </nav>
 
-          <div className="col-span-4 max-w-[44rem] space-y-16 md:col-span-6 lg:col-span-7">
+          <div className="max-w-3xl space-y-16">
             {pub.context ? (
               <Reveal as="section" aria-labelledby="setting">
-                <h2 id="setting" className="meta text-muted">Setting</h2>
+                <h2 id="setting" className="eyebrow text-iris">Setting</h2>
                 <p className="mt-4 text-[1.125rem] leading-relaxed">{pub.context}</p>
               </Reveal>
             ) : null}
             <Reveal as="section" aria-labelledby="summary">
-              <h2 id="summary" className="meta text-muted">Summary</h2>
-              <p className="heading mt-4 text-[1.6rem] leading-snug">{pub.summary}</p>
-              <p className="mt-4 text-sm text-muted">
+              <h2 id="summary" className="eyebrow text-iris">Summary</h2>
+              <p className="font-display mt-4 text-[1.45rem] leading-snug">{pub.summary}</p>
+              <p className="mt-4 text-sm text-faint">
                 A plain-language summary written for this site. The full abstract is on the ACL Anthology page.
               </p>
             </Reveal>
             <Reveal as="section" aria-labelledby="contributions">
-              <h2 id="contributions" className="meta text-muted">Contributions</h2>
-              <ol className="mt-4 space-y-4">
+              <h2 id="contributions" className="eyebrow text-iris">Contributions</h2>
+              <ol className="mt-5 space-y-4">
                 {pub.contributions.map((c, i) => (
-                  <li key={i} className="grid grid-cols-[2rem_1fr] border-t rule pt-4 text-[1.0625rem] leading-relaxed">
-                    <span className="meta pt-1.5 text-vermilion">{String(i + 1).padStart(2, "0")}</span>
+                  <li key={i} className="flex gap-4 rounded-2xl glass p-5 text-[1.0625rem] leading-relaxed">
+                    <span className="font-mono text-sm text-violet">0{i + 1}</span>
                     <span>{c}</span>
                   </li>
                 ))}
@@ -117,21 +111,18 @@ export default async function PublicationPage({ params }: PageProps<"/research/[
             </Reveal>
             {pub.results ? (
               <Reveal as="section" aria-labelledby="results">
-                <h2 id="results" className="meta mb-4 text-muted">Results</h2>
+                <h2 id="results" className="eyebrow mb-4 text-iris">Results</h2>
                 <ResultsTable results={pub.results} />
               </Reveal>
             ) : null}
             <Reveal as="section" aria-labelledby="cite">
-              <h2 id="cite" className="meta mb-4 text-muted">Cite</h2>
+              <h2 id="cite" className="eyebrow mb-4 text-iris">Cite</h2>
               <BibtexBlock bibtex={pub.bibtex} />
             </Reveal>
           </div>
         </div>
-      </div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(scholarlyJsonLd) }}
-      />
-    </article>
+      </article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </PageShell>
   );
 }
