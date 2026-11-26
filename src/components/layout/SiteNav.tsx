@@ -72,11 +72,11 @@ export function SiteNav() {
           } border-b border-line bg-void/70 backdrop-blur-xl`}
         />
         <nav aria-label="Primary" className="container-page flex h-[4.25rem] items-center justify-between">
-          <Link href="/" className="group flex items-center gap-2.5" aria-label={`${site.name}, home`}>
-            <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-iris to-violet-deep text-[0.7rem] font-semibold text-void">
-              FF
+          <Link href="/" className="group flex items-center" aria-label={`${site.name}, home`}>
+            {/* data-nav-logo: the loader's wordmark flies to this spot when it exits. */}
+            <span data-nav-logo className="inline-flex">
+              <RollText text={site.name} className="font-display text-[1.05rem] font-semibold tracking-tight" />
             </span>
-            <RollText text="fahim.foysal" className="hidden font-display text-sm font-medium sm:inline-flex" />
           </Link>
 
           <ul className="hidden items-center gap-0.5 xl:flex">
