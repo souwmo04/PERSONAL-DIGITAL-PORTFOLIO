@@ -38,13 +38,13 @@ export function PortraitCard({ className = "" }: { className?: string }) {
         onPointerMove={onMove}
         onPointerLeave={reset}
         style={{ rotateX: rx, rotateY: ry }}
-        className="relative rounded-[2rem] bg-gradient-to-br from-iris/60 via-violet-deep/40 to-aqua/30 p-px shadow-[0_30px_80px_-30px_rgba(124,58,237,0.6)]"
+        className="relative rounded-[2rem] bg-gradient-to-br from-iris/60 via-violet-deep/40 to-aqua/30 p-px shadow-[0_30px_80px_-30px_color-mix(in_oklab,_var(--color-violet-deep)_60%,_transparent)]"
       >
         <div aria-hidden className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-violet-deep/25 blur-3xl" />
         <div className="relative overflow-hidden rounded-[calc(2rem-1px)] bg-night">
           <Image
-            src="/images/fahim-foysal-portrait.jpg"
-            alt={`Portrait of ${site.name} in a dark suit against a dark violet backdrop`}
+            src="/images/fahim-foysal-photo.jpg"
+            alt={`${site.name}, in a dark suit, standing in front of a brick wall at North South University`}
             width={960}
             height={1200}
             sizes="(min-width: 1024px) 26rem, (min-width: 640px) 60vw, 90vw"
