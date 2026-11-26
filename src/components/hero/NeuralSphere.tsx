@@ -69,7 +69,7 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
       return { a, b, speed: 0.12 + rnd() * 0.25, offset: rnd() };
     });
 
-    // Theme colours, re-read whenever <html data-theme> changes.
+    // Colours come from the CSS theme tokens.
     let deep: RGB = [124, 58, 237];
     let light: RGB = [204, 208, 249];
     let mid: RGB = [167, 139, 250];
@@ -81,11 +81,6 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
       accent = readColor("--color-aqua", accent);
     };
     loadColors();
-    const themeObserver = new MutationObserver(() => {
-      loadColors();
-      if (reduce) draw(2000);
-    });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     let W = 0;
     let H = 0;
@@ -215,7 +210,6 @@ export function NeuralSphere({ className = "" }: { className?: string }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
-      themeObserver.disconnect();
       window.removeEventListener("pointermove", onMove);
     };
   }, []);

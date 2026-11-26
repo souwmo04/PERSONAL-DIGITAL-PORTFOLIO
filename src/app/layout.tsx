@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono, Noto_Sans_Bengali, Sora } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Bengali, Sora } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { IntroProvider } from "@/components/motion/Intro";
@@ -17,15 +17,6 @@ const sora = Sora({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
-});
-// Display serif for the gold theme; loaded on demand.
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-  preload: false,
 });
 // Bangla glyphs only appear in a few places, so this font is not preloaded.
 const bengali = Noto_Sans_Bengali({
@@ -80,8 +71,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Runs before first paint: apply the saved theme, and skip the loader for returning visitors or reduced motion.
-const INTRO_GATE = `try{var d=document.documentElement;var t=localStorage.getItem("ff-theme");if(t==="gold"||t==="violet")d.setAttribute("data-theme",t);if(sessionStorage.getItem("ff-intro")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("intro-seen")}}catch(e){}`;
+// Runs before first paint: skip the loader for returning visitors or reduced motion.
+const INTRO_GATE = `try{if(sessionStorage.getItem("ff-intro")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-seen")}}catch(e){}`;
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -109,7 +100,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${sora.variable} ${cormorant.variable} ${bengali.variable} antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${sora.variable} ${bengali.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>

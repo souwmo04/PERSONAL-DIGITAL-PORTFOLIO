@@ -48,32 +48,6 @@
   }
 }
 
-/* ------------------------------------------------------------------
-   "Aurum" theme: warm black, champagne text and gold light, with an
-   elegant serif for display type. Every component reads these tokens.
-   ------------------------------------------------------------------ */
-html[data-theme="gold"] {
-  --color-void: #080705;
-  --color-night: #100d09;
-  --color-surface: #16120c;
-  --color-line: rgb(255 236 200 / 0.1);
-  --color-text: #f6f0e3;
-  --color-dim: #bdb29c;
-  --color-faint: #857c69;
-  --color-violet: #d4af37;
-  --color-violet-deep: #8c6a1a;
-  --color-iris: #f1dfa8;
-  --color-aqua: #e8b86a;
-  --font-display: var(--font-cormorant), var(--font-geist), serif;
-}
-html[data-theme="gold"] .heading-xl {
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-html,
-body {
-  transition: background-color 0.5s ease;
-}
 
 html {
   -webkit-text-size-adjust: 100%;
