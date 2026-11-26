@@ -7,6 +7,13 @@ import { timeline } from "@/content/experience";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+const KIND_STYLE: Record<string, string> = {
+  research: "",
+  design: "!border-pink-300/30 !bg-pink-300/10 !text-pink-200",
+  leadership: "!border-amber-300/30 !bg-amber-300/10 !text-amber-200",
+  education: "!border-aqua/30 !bg-aqua/10 !text-cyan-100",
+};
+
 /** Career timeline: the centre line fills as you scroll; cards slide in from alternating sides. */
 export function Experience() {
   const ref = useRef<HTMLDivElement>(null);
@@ -20,8 +27,8 @@ export function Experience() {
           id="career-title"
           eyebrow="Trajectory"
           title="Career &"
-          accent="experience"
-          lead="Research first, and a habit of building things that work."
+          accent="journey"
+          lead="Research, community work at IEEE NSU, and the schools that got me here."
         />
 
         <div ref={ref} className="relative mx-auto mt-20 max-w-5xl">
@@ -60,9 +67,9 @@ export function Experience() {
                     <article className="group relative overflow-hidden rounded-3xl glass p-7 transition-colors duration-500 hover:border-violet/30">
                       <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-violet/0 blur-[60px] transition-colors duration-700 group-hover:bg-violet/25" />
                       <div className="relative flex flex-wrap items-center gap-3">
-                        <span className="pill !text-[0.625rem]">{t.kind}</span>
+                        <span className={`pill !text-[0.625rem] ${KIND_STYLE[t.kind] ?? ""}`}>{t.kind}</span>
                         <span className="flex items-center gap-2 font-mono text-xs text-dim">
-                          {t.period === "Now" ? (
+                          {t.period.includes("Present") ? (
                             <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
                           ) : null}
                           {t.period}
@@ -71,6 +78,16 @@ export function Experience() {
                       <h3 className="font-display relative mt-5 text-2xl font-semibold leading-tight">{t.title}</h3>
                       <p className="relative mt-1 text-sm text-iris">{t.org}</p>
                       <p className="relative mt-4 text-[0.95rem] leading-relaxed text-dim">{t.detail}</p>
+                      {t.points ? (
+                        <ul className="relative mt-4 space-y-2">
+                          {t.points.map((pt) => (
+                            <li key={pt} className="flex gap-2.5 text-sm leading-relaxed text-dim">
+                              <span aria-hidden className="mt-2 size-1 shrink-0 rounded-full bg-iris" />
+                              {pt}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
                     </article>
                   </motion.div>
                 </li>
