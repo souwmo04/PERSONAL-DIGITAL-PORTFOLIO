@@ -41,7 +41,8 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 
 | Pattern               | Where                         | How                                                          |
 | --------------------- | ----------------------------- | ------------------------------------------------------------ |
-| Intro curtain         | First visit to `/`            | A counter runs to 100, then two panels lift. Once per session. |
+| Greeting loader       | First page of a session       | "Hello" in 8 languages ending in Bangla (স্বাগতম), with a progress counter; the sheet lifts on a curved edge that flattens. About 2s, skippable (click, Esc, Enter), gated before first paint so returning visitors never see it. |
+| Portrait tilt         | About                         | The photo tilts in 3D toward the cursor with a moving light glare |
 | Blur-in characters    | Hero name, page titles        | Letters rise 0.35em from 10px blur, 35ms apart               |
 | Rotating words        | Hero roles                    | Vertical slide with blur, every 2.6s                         |
 | Scroll-lit paragraph  | About lead                    | Each word goes from 14% to 100% opacity as it scrolls        |
