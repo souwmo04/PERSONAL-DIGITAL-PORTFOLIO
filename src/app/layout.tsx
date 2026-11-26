@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Noto_Sans_Bengali, Sora } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { IntroProvider } from "@/components/motion/Intro";
 import { Cursor } from "@/components/ui/Cursor";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { SocialRail } from "@/components/layout/SocialRail";
@@ -70,11 +71,14 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const INTRO_GATE = `try{if(sessionStorage.getItem("ff-intro")==="1"||matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-seen")}}catch(e){}`;
+
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: site.name,
   url: site.url,
+  image: `${site.url}/images/fahim-foysal-avatar.jpg`,
   email: `mailto:${site.email}`,
   jobTitle: "Research Assistant",
   worksFor: { "@type": "Organization", name: "TriModal AI Lab, North South University" },
@@ -96,7 +100,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geist.variable} ${geistMono.variable} ${sora.variable} ${bengali.variable} antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Runs before first paint: skip the loader for returning visitors and reduced motion. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_GATE }} />
+      </head>
       {/* suppressHydrationWarning: extensions such as Grammarly add attributes to <body> before React loads. */}
       <body className="grain min-h-dvh" suppressHydrationWarning>
         <div id="top" aria-hidden />
@@ -107,16 +116,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <MotionProvider>
-          <SmoothScroll />
-          <Cursor />
-          <div className="no-print">
-            <SiteNav />
-            <SocialRail />
-          </div>
-          <main id="main">{children}</main>
-          <div className="no-print">
-            <SiteFooter />
-          </div>
+          <IntroProvider>
+            <SmoothScroll />
+            <Cursor />
+            <div className="no-print">
+              <SiteNav />
+              <SocialRail />
+            </div>
+            <main id="main">{children}</main>
+            <div className="no-print">
+              <SiteFooter />
+            </div>
+          </IntroProvider>
         </MotionProvider>
         <script
           type="application/ld+json"

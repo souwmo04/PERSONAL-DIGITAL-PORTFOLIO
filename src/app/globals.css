@@ -83,6 +83,14 @@ body {
   }
 }
 
+/* Loader: hidden before first paint for returning visitors; page locked while it plays. */
+html.intro-seen [data-intro] {
+  display: none;
+}
+html.intro-active {
+  overflow: hidden;
+}
+
 /* Hide the system cursor only where the custom cursor is active. */
 html.has-cursor,
 html.has-cursor a,

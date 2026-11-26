@@ -1,4 +1,3 @@
-import { IntroProvider } from "@/components/motion/Intro";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
@@ -11,7 +10,7 @@ import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <IntroProvider>
+    <>
       <Hero />
       <About />
       <Experience />
@@ -21,6 +20,6 @@ export default function Home() {
       <Design />
       <Stack />
       <Contact />
-    </IntroProvider>
+    </>
   );
 }
