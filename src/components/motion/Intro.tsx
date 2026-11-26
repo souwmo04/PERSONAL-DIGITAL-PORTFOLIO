@@ -1,70 +1,106 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { Check } from "lucide-react";
+import { AnimatePresence, motion, useAnimationControls } from "motion/react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const IntroContext = createContext(true);
 
-/** True once the loader has started lifting (or was skipped). */
+/** True once the loader has started its exit (or was skipped). */
 export const useIntroDone = () => useContext(IntroContext);
 
-/** Greetings, ending with "welcome" in Bangla. */
-const WORDS = ["Hello", "Bonjour", "Hola", "Ciao", "こんにちは", "Hallo", "مرحبا", "স্বাগতম"];
+const NAME = "Fahim Foysal";
+const GLYPHS = "01<>/{}[]#$%&*+=?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-/** Model-loading steps, each shown from its progress threshold onward. */
-const STEPS = [
-  { at: 0, label: "Loading tokenizer", detail: "en · bn" },
-  { at: 16, label: "Loading weights", detail: "research.safetensors" },
-  { at: 34, label: "Indexing projects & papers", detail: "projects · papers" },
-  { at: 52, label: "Warming up attention heads", detail: "multimodal" },
-  { at: 72, label: "Aligning vision and language", detail: "VLM" },
-  { at: 92, label: "Model ready", detail: "fahim-foysal-v1" },
-];
+/** A deliberately silly build log. Each line appears at its progress threshold. */
+const LOG = [
+  { at: 0, text: "$ npm run fahim --mode=portfolio", tone: "cmd" },
+  { at: 8, text: "› brewing chai for the GPU ☕", tone: "log" },
+  { at: 22, text: "› downloading more RAM… (legally)", tone: "log" },
+  { at: 36, text: "› teaching the neurons Bangla: শেখা হচ্ছে…", tone: "log" },
+  { at: 50, text: "› bribing the attention heads", tone: "log" },
+  { at: 64, text: "› fixing bugs, adding features (same thing)", tone: "log" },
+  { at: 80, text: "› it works on my machine ✓", tone: "log" },
+  { at: 96, text: "✓ compiled with 0 errors (we checked twice)", tone: "ok" },
+] as const;
 
-const LOAD_MS = 3600; // bar fills over this time…
-const HOLD_MS = 400; // …then holds at 100% before lifting (≈4s total)
-const EXIT = { duration: 1, ease: [0.76, 0, 0.24, 1] as const };
+const LOAD_MS = 3600;
+const HOLD_MS = 350;
+const EXIT_MS = 1000;
+const EASE = [0.76, 0, 0.24, 1] as const;
 const STORAGE_KEY = "ff-intro";
 
-/** Fast start, a short "thinking" slowdown mid-way, then a confident finish. */
 function curve(t: number) {
   const eased = 1 - Math.pow(1 - t, 2.2);
   const stall = 0.04 * Math.sin(Math.PI * Math.min(1, t * 1.6));
   return Math.min(1, Math.max(0, eased - stall));
 }
 
+/** Letters scramble through glyphs and lock in from left to right. */
+function scramble(elapsed: number) {
+  const settleStart = 250;
+  const perLetter = 110;
+  return Array.from(NAME)
+    .map((ch, i) => {
+      if (ch === " ") return " ";
+      return elapsed > settleStart + i * perLetter ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    })
+    .join("");
+}
+
 /**
- * First-visit loader, styled as an AI model loading the page.
+ * First-visit loader with a playful tech theme.
  *
- * Greetings cycle in eight languages, ending in Bangla. Under them, a model
- * card shows a progress bar, a layer counter and loading steps. When it hits
- * 100% the sheet lifts away on a curved edge to reveal the page.
- *
- * - About 4 seconds, shown once per browser session. An inline script in the
- *   layout adds `intro-seen` to <html> before the first paint, so returning
- *   visitors never see a flash.
- * - Skippable with a click, Enter, Space or Escape. Skipped for reduced motion.
+ * - The name decodes letter by letter, and a few letters keep flickering
+ *   between solid and outline.
+ * - A tongue-in-cheek build log runs with an ASCII progress bar.
+ * - On exit the name glides into its place in the navigation bar while the
+ *   sheet lifts away on a curved edge.
+ * - About 4 seconds, once per session (gated before first paint by an inline
+ *   script in the layout), skippable with a click, Enter, Space or Escape, and
+ *   off for reduced motion.
  */
 export function IntroProvider({ children }: { children: React.ReactNode }) {
-  const [phase, setPhase] = useState<"show" | "done">("show");
+  const [phase, setPhase] = useState<"show" | "exit" | "done">("show");
   const [progress, setProgress] = useState(0);
-  const finished = useRef(false);
+  const [word, setWord] = useState(() => NAME.replace(/\S/g, "·"));
+  const [outlined, setOutlined] = useState<number[]>([]);
+  const wordRef = useRef<HTMLParagraphElement>(null);
+  const controls = useAnimationControls();
+  const exiting = useRef(false);
 
-  const finish = useCallback(() => {
-    if (finished.current) return;
-    finished.current = true;
+  const exit = useCallback(async () => {
+    if (exiting.current) return;
+    exiting.current = true;
     try {
       sessionStorage.setItem(STORAGE_KEY, "1");
     } catch {}
-    setPhase("done");
+    setWord(NAME);
+    setOutlined([]);
+    setProgress(100);
+    setPhase("exit");
     document.documentElement.classList.remove("intro-active");
     window.__lenis?.start();
-  }, []);
+
+    // Fly the wordmark to the nav logo.
+    const target = document.querySelector<HTMLElement>("[data-nav-logo]")?.getBoundingClientRect();
+    const own = wordRef.current?.getBoundingClientRect();
+    if (target && own && own.height > 0) {
+      const scale = target.height / own.height;
+      await controls.start({
+        x: target.left - own.left,
+        y: target.top - own.top,
+        scale,
+        transition: { duration: EXIT_MS / 1000, ease: EASE },
+      });
+    } else {
+      await new Promise((r) => setTimeout(r, EXIT_MS));
+    }
+    setPhase("done");
+  }, [controls]);
 
   useEffect(() => {
     if (document.documentElement.classList.contains("intro-seen")) {
-      finished.current = true;
+      exiting.current = true;
       // Returning visitor or reduced motion: the overlay is already hidden by CSS.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPhase("done");
@@ -73,132 +109,97 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.add("intro-active");
     window.__lenis?.stop();
 
-    // A timer, not requestAnimationFrame: frames pause in background tabs, timers keep counting.
+    // Timers rather than animation frames: frames pause in background tabs.
     const start = performance.now();
     let hold = 0;
-    const interval = window.setInterval(() => {
-      const t = Math.min(1, (performance.now() - start) / LOAD_MS);
+    const tick = window.setInterval(() => {
+      const elapsed = performance.now() - start;
+      const t = Math.min(1, elapsed / LOAD_MS);
       setProgress(Math.round(curve(t) * 100));
+      setWord(scramble(elapsed));
       if (t >= 1) {
-        clearInterval(interval);
-        hold = window.setTimeout(finish, HOLD_MS);
+        clearInterval(tick);
+        hold = window.setTimeout(exit, HOLD_MS);
       }
-    }, 40);
-    // Safety net: never trap the visitor.
-    const failsafe = window.setTimeout(finish, LOAD_MS + HOLD_MS + 2500);
+    }, 45);
+    const flicker = window.setInterval(() => {
+      const letters = Array.from(NAME).map((c, i) => (c === " " ? -1 : i)).filter((i) => i >= 0);
+      setOutlined(letters.filter(() => Math.random() < 0.22));
+    }, 260);
+    const failsafe = window.setTimeout(exit, LOAD_MS + HOLD_MS + 2500);
 
     const onKey = (e: KeyboardEvent) => {
-      if (["Escape", "Enter", " "].includes(e.key)) finish();
+      if (["Escape", "Enter", " "].includes(e.key)) exit();
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      clearInterval(interval);
+      clearInterval(tick);
+      clearInterval(flicker);
       clearTimeout(hold);
       clearTimeout(failsafe);
       window.removeEventListener("keydown", onKey);
     };
-  }, [finish]);
+  }, [exit]);
 
-  const wordIndex = Math.min(WORDS.length - 1, Math.floor((progress / 100) * WORDS.length));
-  const stepIndex = STEPS.reduce((acc, s, i) => (progress >= s.at ? i : acc), 0);
-  const layer = Math.max(1, Math.round((progress / 100) * 24));
-  const ready = progress >= 100;
+  const visibleLog = LOG.filter((l) => progress >= l.at);
+  const cells = 24;
+  const filled = Math.round((progress / 100) * cells);
+  const bar = "█".repeat(filled) + "░".repeat(cells - filled);
 
   return (
-    <IntroContext.Provider value={phase === "done"}>
-      <AnimatePresence>
-        {phase === "show" ? (
+    <IntroContext.Provider value={phase !== "show"}>
+      {phase !== "done" ? (
+        <div data-intro className="fixed inset-0 z-[150]" onClick={exit} role="status" aria-live="polite" aria-label="Loading Fahim Foysal's portfolio">
+          {/* Sheet */}
           <motion.div
-            key="intro"
-            data-intro
-            role="status"
-            aria-live="polite"
-            aria-label="Loading Fahim Foysal's portfolio"
-            onClick={finish}
-            className="fixed inset-0 z-[150] cursor-pointer"
-            exit={{ y: "-100%", transition: EXIT }}
+            className="absolute inset-0 cursor-pointer"
+            animate={phase === "exit" ? { y: "-100%" } : { y: "0%" }}
+            transition={{ duration: EXIT_MS / 1000, ease: EASE }}
           >
             <div className="absolute inset-0 overflow-hidden bg-night">
-              <div aria-hidden className="absolute left-1/2 top-[38%] size-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-deep/20 blur-[120px]" />
+              <div aria-hidden className="absolute left-1/2 top-[40%] size-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-deep/20 blur-[130px]" />
               <div
                 aria-hidden
                 className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,#000_30%,transparent_75%)]"
               />
 
-              <div className="relative flex h-full flex-col items-center justify-center px-[var(--gutter)]">
-                {/* Greeting */}
-                <div className="flex h-[clamp(4rem,11vw,7rem)] items-center">
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.p
-                      key={WORDS[wordIndex]}
-                      className="flex items-center gap-4 font-display text-[clamp(2.6rem,8.5vw,5.75rem)] font-semibold tracking-tight text-text"
-                      initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, y: -16, filter: "blur(8px)" }}
-                      transition={{ duration: 0.28 }}
-                    >
-                      <span aria-hidden className="size-3 rounded-full bg-violet shadow-[0_0_20px_4px_rgba(167,139,250,0.8)] md:size-4" />
-                      <span className={wordIndex === WORDS.length - 1 ? "text-gradient" : ""}>{WORDS[wordIndex]}</span>
-                    </motion.p>
-                  </AnimatePresence>
-                </div>
-
-                {/* Model card */}
-                <div className="mt-10 w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md sm:p-6">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="flex items-center gap-2.5 font-mono text-xs text-dim">
-                      <span className={`size-2 rounded-full ${ready ? "bg-emerald-400" : "animate-pulse bg-violet"}`} />
-                      <span className="text-text">fahim-foysal-v1</span>
-                      <span className="hidden text-faint sm:inline">· portfolio model</span>
-                    </p>
-                    <p className="font-mono text-xs tabular-nums text-faint">layer {String(layer).padStart(2, "0")}/24</p>
+              {/* Terminal */}
+              <div className="absolute inset-x-0 top-[58%] mx-auto w-[min(92vw,36rem)] px-1">
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md">
+                  <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+                    <span className="size-2.5 rounded-full bg-[#ff5f57]/80" />
+                    <span className="size-2.5 rounded-full bg-[#febc2e]/80" />
+                    <span className="size-2.5 rounded-full bg-[#28c840]/80" />
+                    <span className="ml-3 font-mono text-[0.68rem] text-faint">~/fahim-foysal — zsh</span>
                   </div>
-
-                  {/* Bar */}
-                  <div className="relative mt-4 h-2 overflow-hidden rounded-full bg-white/[0.06]">
-                    <div
-                      className="relative h-full rounded-full bg-gradient-to-r from-violet-deep via-violet to-aqua shadow-[0_0_16px_rgba(167,139,250,0.7)]"
-                      style={{ width: `${progress}%` }}
-                    >
-                      {!ready ? (
-                        <span className="absolute inset-0 animate-[shimmer_1.2s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent)] bg-[length:50%_100%] bg-no-repeat" />
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex items-end justify-between gap-6">
-                    <ul className="min-h-[3.25rem] space-y-1 font-mono text-[0.72rem] leading-snug">
-                      {STEPS.slice(Math.max(0, stepIndex - 1), stepIndex + 1).map((s, i, arr) => {
-                        const current = i === arr.length - 1;
-                        return (
-                          <motion.li
-                            key={s.label}
-                            initial={{ opacity: 0, y: 6 }}
-                            animate={{ opacity: current ? 1 : 0.45, y: 0 }}
-                            transition={{ duration: 0.25 }}
-                            className="flex items-center gap-2"
-                          >
-                            {current && !ready ? (
-                              <span className="inline-block size-3 animate-spin rounded-full border border-violet border-t-transparent" />
-                            ) : (
-                              <Check aria-hidden className="size-3 text-emerald-400" />
-                            )}
-                            <span className={current ? "text-text" : "text-faint"}>{s.label}</span>
-                            <span className="hidden text-faint sm:inline">{s.detail}</span>
-                          </motion.li>
-                        );
-                      })}
-                    </ul>
-                    <p className="font-display text-[clamp(2rem,5vw,3rem)] font-semibold leading-none tabular-nums text-text/90">
-                      {progress}
-                      <span className="text-violet">%</span>
-                    </p>
+                  <ul className="flex h-[9.5rem] flex-col justify-end gap-1 overflow-hidden px-4 py-3 font-mono text-[0.74rem] leading-relaxed sm:text-[0.78rem]">
+                    <AnimatePresence initial={false}>
+                      {visibleLog.slice(-5).map((l) => (
+                        <motion.li
+                          key={l.text}
+                          layout
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className={l.tone === "cmd" ? "text-iris" : l.tone === "ok" ? "text-emerald-300" : "text-dim"}
+                        >
+                          {l.text}
+                        </motion.li>
+                      ))}
+                    </AnimatePresence>
+                  </ul>
+                  <div className="flex items-center justify-between gap-4 border-t border-white/10 px-4 py-2.5 font-mono text-[0.72rem]">
+                    <span className="truncate text-violet" aria-hidden>
+                      [{bar}]
+                    </span>
+                    <span className="tabular-nums text-text">{progress}%</span>
                   </div>
                 </div>
               </div>
 
               <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-[var(--gutter)] pb-7">
-                <p className="eyebrow text-faint">Fahim Foysal · Portfolio 2026</p>
+                <p className="eyebrow text-faint">Portfolio 2026 · Dhaka, BD</p>
                 <p className="eyebrow hidden text-faint/70 sm:block">Click or press Esc to skip</p>
               </div>
             </div>
@@ -208,12 +209,44 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
               <motion.path
                 className="fill-night"
                 initial={{ d: "M0 0 L100 0 Q50 100 0 0 Z" }}
-                exit={{ d: "M0 0 L100 0 Q50 0 0 0 Z", transition: EXIT }}
+                animate={phase === "exit" ? { d: "M0 0 L100 0 Q50 0 0 0 Z" } : undefined}
+                transition={{ duration: EXIT_MS / 1000, ease: EASE }}
               />
             </svg>
           </motion.div>
-        ) : null}
-      </AnimatePresence>
+
+          {/* Wordmark: outside the sheet, so it can fly into the nav */}
+          <div className="pointer-events-none absolute inset-x-0 top-[40%] flex -translate-y-1/2 justify-center">
+            <motion.p
+              ref={wordRef}
+              animate={controls}
+              style={{ transformOrigin: "0 0" }}
+              className="font-display text-[clamp(2.75rem,10vw,7.5rem)] font-semibold leading-none tracking-tight text-text"
+              aria-hidden
+            >
+              {Array.from(NAME).map((real, i) => {
+                const shown = word[i] ?? real;
+                const resolved = shown === real;
+                return (
+                  // The real letter reserves the width, so scrambled glyphs never make the word jump.
+                  <span key={i} className="relative inline-block">
+                    <span
+                      className={`${resolved ? "" : "invisible"} transition-colors duration-150 ${
+                        outlined.includes(i) ? "text-transparent [-webkit-text-stroke:1.5px_var(--color-iris)]" : ""
+                      }`}
+                    >
+                      {real === " " ? " " : real}
+                    </span>
+                    {!resolved ? (
+                      <span className="absolute inset-0 text-center font-mono font-normal text-violet/80">{shown}</span>
+                    ) : null}
+                  </span>
+                );
+              })}
+            </motion.p>
+          </div>
+        </div>
+      ) : null}
       {children}
     </IntroContext.Provider>
   );
