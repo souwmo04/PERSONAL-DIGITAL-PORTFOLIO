@@ -78,7 +78,7 @@ const personJsonLd = {
   "@type": "Person",
   name: site.name,
   url: site.url,
-  image: `${site.url}/images/fahim-foysal-avatar.jpg`,
+  image: `${site.url}/images/fahim-foysal-headshot.jpg`,
   email: `mailto:${site.email}`,
   jobTitle: "Research Assistant",
   worksFor: { "@type": "Organization", name: "TriModal AI Lab, North South University" },

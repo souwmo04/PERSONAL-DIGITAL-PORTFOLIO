@@ -9,7 +9,7 @@ export const contentType = "image/png";
 
 /** Social card in the site's night palette, with the portrait. */
 export default async function OpengraphImage() {
-  const photo = await readFile(path.join(process.cwd(), "public/images/fahim-foysal-avatar.jpg"));
+  const photo = await readFile(path.join(process.cwd(), "public/images/fahim-foysal-headshot.jpg"));
   const src = `data:image/jpeg;base64,${photo.toString("base64")}`;
 
   return new ImageResponse(
