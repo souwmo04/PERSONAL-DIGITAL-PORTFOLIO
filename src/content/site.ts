@@ -69,11 +69,12 @@ export const contactLinks: LinkItem[] = [
 
 export const navItems = [
   { id: "about", label: "About", n: "01" },
-  { id: "research", label: "Research", n: "02" },
-  { id: "work", label: "Work", n: "03" },
-  { id: "record", label: "Record", n: "04" },
-  { id: "toolkit", label: "Toolkit", n: "05" },
-  { id: "contact", label: "Contact", n: "06" },
+  { id: "career", label: "Career", n: "02" },
+  { id: "achievements", label: "Awards", n: "03" },
+  { id: "research", label: "Research", n: "04" },
+  { id: "work", label: "Projects", n: "05" },
+  { id: "stack", label: "Stack", n: "06" },
+  { id: "contact", label: "Contact", n: "07" },
 ] as const;
 
 export const cvHref = site.cv.pdf || site.cv.page;

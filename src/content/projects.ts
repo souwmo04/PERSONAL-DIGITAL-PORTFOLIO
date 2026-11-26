@@ -18,6 +18,7 @@ export const projects: Project[] = [
     description:
       "An intelligent vision-language system for accessible, interactive dashboard question answering.",
     kind: "Research system",
+    category: "Research",
     areas: [
       "Vision-Language Models",
       "Dashboard interaction",
@@ -59,6 +60,7 @@ export const projects: Project[] = [
     description:
       "An AI-powered healthcare assistant with conversational guidance, voice interaction and document reading.",
     kind: "Full-stack application",
+    category: "Applied AI",
     areas: ["Conversational AI", "Speech", "OCR", "Healthcare"],
     problem:
       "Medical information is everywhere, but it is hard to use. Prescriptions and reports are handwritten or dense. Typing symptoms is a barrier for many people, and general chatbots don't keep the context of a person's own documents.",
@@ -86,6 +88,7 @@ export const projects: Project[] = [
     description:
       "A bilingual Bangla–English relationship support assistant built on retrieval-augmented generation and local LLMs.",
     kind: "Applied NLP",
+    category: "Applied AI",
     areas: ["Retrieval-Augmented Generation", "Local LLMs", "Conversational AI", "Knowledge retrieval"],
     problem:
       "People rarely ask for help with relationships in a second language. Most support tools are English-only, and general chatbots can drift or make things up on sensitive topics. Many people also don't want such private conversations sent to a cloud API.",
@@ -113,6 +116,7 @@ export const projects: Project[] = [
     description:
       "A medical image classification research project exploring deep convolutional and transfer-learning approaches.",
     kind: "Computer vision research",
+    category: "Research",
     areas: ["Computer Vision", "Deep Learning", "Medical Imaging", "Classification"],
     problem:
       "Reading medical images takes expert time that many hospitals don't have enough of. Automated classifiers can help with triage, but medical datasets are small and imbalanced, and errors are costly. A model has to be accurate, and its behaviour has to be understood.",

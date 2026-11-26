@@ -10,19 +10,19 @@ export const timeline: TimelineEntry[] = [
     kind: "research",
   },
   {
+    period: "Expected Dec 2026",
+    title: "BSc in Computer Science & Engineering",
+    org: "North South University, Bangladesh",
+    detail: "Undergraduate study in computer science, with coursework and projects centred on AI, machine learning and software systems.",
+    kind: "education",
+  },
+  {
     period: "2025",
     title: "Workshop paper, ACL Anthology",
     org: "BLP-2025 at IJCNLP-AACL 2025",
     detail:
       "Co-authored a system paper for the first shared task on code generation from Bangla instructions.",
     kind: "research",
-  },
-  {
-    period: "Dec 2026",
-    title: "BSc in Computer Science & Engineering",
-    org: "North South University, Bangladesh",
-    detail: "Expected graduation, December 2026.",
-    kind: "education",
   },
 ];
 

@@ -50,6 +50,8 @@ export type Project = {
   tagline: string;
   description: string;
   kind: string;
+  /** Used by the project filter tabs. */
+  category: "Research" | "Applied AI";
   year?: string;
   areas: string[];
   problem: string;
