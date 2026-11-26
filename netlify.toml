@@ -1,0 +1,8 @@
+# Netlify detects Next.js and installs its OpenNext adapter automatically;
+# this file only pins the build command and Node version for reproducible builds.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
