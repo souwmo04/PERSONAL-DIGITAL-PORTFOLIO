@@ -83,6 +83,15 @@ body {
   }
 }
 
+@keyframes shimmer {
+  from {
+    background-position: -50% 0;
+  }
+  to {
+    background-position: 150% 0;
+  }
+}
+
 /* Loader: hidden before first paint for returning visitors; page locked while it plays. */
 html.intro-seen [data-intro] {
   display: none;
