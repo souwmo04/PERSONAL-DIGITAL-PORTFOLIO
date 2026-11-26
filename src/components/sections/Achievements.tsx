@@ -3,6 +3,7 @@ import { ArrowUpRight, Award, BookOpen, Rocket, ShieldCheck, Star } from "lucide
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { FxCard } from "@/components/ui/FxCard";
 import { achievements } from "@/content/experience";
 
 const icons = [Rocket, ShieldCheck, BookOpen, Award];
@@ -71,7 +72,7 @@ export function Achievements() {
             <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {more.map((a, i) => (
                 <Reveal as="li" key={a.event + a.rank} delay={(i % 3) * 0.06}>
-                  <div className="group flex h-full items-start gap-4 rounded-2xl glass p-5 transition-colors hover:border-violet/30">
+                  <FxCard className="group flex h-full items-start gap-4 rounded-2xl glass p-5 hover:border-violet/30">
                     <Star aria-hidden className="mt-0.5 size-4 shrink-0 text-violet transition-transform duration-500 group-hover:rotate-[72deg]" />
                     <div className="min-w-0">
                       <p className="font-display font-semibold leading-snug">
@@ -82,7 +83,7 @@ export function Achievements() {
                         {[a.scope, a.year].filter(Boolean).join(" · ")}
                       </p>
                     </div>
-                  </div>
+                  </FxCard>
                 </Reveal>
               ))}
             </ul>

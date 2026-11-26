@@ -10,7 +10,7 @@ export function Contact() {
   const others = contactLinks.filter((l) => l.label !== "Email");
   return (
     <section id="contact" aria-labelledby="contact-title" className="section-y relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[40rem] bg-[radial-gradient(ellipse_at_bottom,rgba(124,58,237,0.35),transparent_65%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[40rem] bg-[radial-gradient(ellipse_at_bottom,color-mix(in oklab, var(--color-violet-deep) 35%, transparent),transparent_65%)]" />
       <div className="container-page flex flex-col items-center text-center">
         <Reveal blur={false}>
           <StatusIndicator />
@@ -45,7 +45,7 @@ export function Contact() {
                 <a
                   href={l.href}
                   {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group flex items-center justify-between rounded-2xl glass px-5 py-4 transition-colors hover:border-violet/40"
+                  className="fx-card group relative flex items-center justify-between rounded-2xl glass px-5 py-4 hover:border-violet/40"
                 >
                   <span className="font-medium">{l.label}</span>
                   <span className="flex items-center gap-2 text-sm text-dim group-hover:text-iris">
@@ -59,7 +59,7 @@ export function Contact() {
             <li>
               <Link
                 href={cvHref}
-                className="group flex items-center justify-between rounded-2xl glass px-5 py-4 transition-colors hover:border-violet/40"
+                className="fx-card group relative flex items-center justify-between rounded-2xl glass px-5 py-4 hover:border-violet/40"
               >
                 <span className="font-medium">Curriculum vitae</span>
                 <span className="flex items-center gap-2 text-sm text-dim group-hover:text-iris">

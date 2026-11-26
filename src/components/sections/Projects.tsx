@@ -12,6 +12,7 @@ import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { Parallax } from "@/components/motion/Parallax";
+import { useTilt } from "@/components/ui/useTilt";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const FILTERS = ["All", "Research", "Applied AI", "Web & Mobile"] as const;
@@ -19,6 +20,7 @@ const FILTERS = ["All", "Research", "Applied AI", "Web & Mobile"] as const;
 export function Projects() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
   const [expanded, setExpanded] = useState(false);
+  const tilt = useTilt(5);
   const filtered = filter === "All" ? projects : projects.filter((p) => p.category === filter);
   // "All" starts with the featured projects; a category shows everything in it.
   const shown = filter === "All" && !expanded ? filtered.filter((p) => p.featured) : filtered;
@@ -51,7 +53,7 @@ export function Projects() {
                 {active ? (
                   <motion.span
                     layoutId="project-filter"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-violet to-iris shadow-[0_0_30px_-4px_rgba(167,139,250,0.8)]"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-violet to-iris shadow-[0_0_30px_-4px_color-mix(in_oklab,_var(--color-violet)_80%,_transparent)]"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 ) : (
@@ -79,7 +81,7 @@ export function Projects() {
                 transition={{ duration: 0.9, delay: (i % 2) * 0.1, ease: EASE }}
               >
                 <Parallax amount={i % 2 ? 50 : 18} className="h-full">
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass transition-[border-color,transform] duration-500 ease-out-expo hover:-translate-y-1.5 hover:border-violet/35">
+                <article {...tilt} className="fx-card group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass hover:border-violet/35">
                   {p.cover ? (
                     <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-night">
                       <Image

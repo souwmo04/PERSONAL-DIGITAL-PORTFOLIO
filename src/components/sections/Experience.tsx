@@ -4,6 +4,7 @@ import { motion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { timeline } from "@/content/experience";
+import { useTilt } from "@/components/ui/useTilt";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -19,6 +20,7 @@ export function Experience() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 70%", "end 60%"] });
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
+  const tilt = useTilt(5);
 
   return (
     <section id="career" aria-labelledby="career-title" className="section-y relative">
@@ -37,7 +39,7 @@ export function Experience() {
           <motion.div
             aria-hidden
             style={{ scaleY: fill }}
-            className="absolute bottom-0 left-4 top-0 w-px origin-top bg-gradient-to-b from-iris via-violet to-violet-deep shadow-[0_0_12px_rgba(167,139,250,0.8)] md:left-1/2 md:-translate-x-1/2"
+            className="absolute bottom-0 left-4 top-0 w-px origin-top bg-gradient-to-b from-iris via-violet to-violet-deep shadow-[0_0_12px_color-mix(in_oklab,_var(--color-violet)_80%,_transparent)] md:left-1/2 md:-translate-x-1/2"
           />
 
           <ol className="space-y-14 md:space-y-20">
@@ -54,7 +56,7 @@ export function Experience() {
                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
                     className="absolute left-4 top-7 z-10 grid size-4 -translate-x-1/2 place-items-center rounded-full bg-void ring-1 ring-violet md:left-1/2"
                   >
-                    <span className="size-1.5 rounded-full bg-iris shadow-[0_0_12px_3px_rgba(196,181,253,0.8)]" />
+                    <span className="size-1.5 rounded-full bg-iris shadow-[0_0_12px_3px_color-mix(in_oklab,_var(--color-iris)_80%,_transparent)]" />
                   </motion.span>
 
                   <motion.div
@@ -64,7 +66,7 @@ export function Experience() {
                     transition={{ duration: 1.1, ease: EASE }}
                     className={`ml-10 md:ml-0 ${left ? "md:col-start-1" : "md:col-start-2"}`}
                   >
-                    <article className="group relative overflow-hidden rounded-3xl glass p-7 transition-colors duration-500 hover:border-violet/30">
+                    <article {...tilt} className="fx-card group relative overflow-hidden rounded-3xl glass p-7 hover:border-violet/30">
                       <div aria-hidden className="absolute -right-10 -top-10 size-40 rounded-full bg-violet/0 blur-[60px] transition-colors duration-700 group-hover:bg-violet/25" />
                       <div className="relative flex flex-wrap items-center gap-3">
                         <span className={`pill !text-[0.625rem] ${KIND_STYLE[t.kind] ?? ""}`}>{t.kind}</span>
