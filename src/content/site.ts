@@ -10,10 +10,12 @@ export const site = {
   name: "Fahim Foysal",
   firstName: "Fahim",
   nickname: "Souwmik",
-  /** Canonical URL. Set NEXT_PUBLIC_SITE_URL once you have a domain;
-   *  on Vercel the production URL is picked up automatically. */
+  /** Canonical URL for links, the sitemap and social previews.
+   *  Set NEXT_PUBLIC_SITE_URL for a custom domain. Otherwise Netlify's `URL`
+   *  (the site's main address) or Vercel's production URL is used automatically. */
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.URL ??
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000"),
