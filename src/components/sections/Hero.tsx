@@ -1,114 +1,119 @@
-import { ArrowDown } from "lucide-react";
-import { AttentionField } from "@/components/hero/AttentionField";
-import { LineReveal, Reveal } from "@/components/motion/Reveal";
+"use client";
+
+import { motion, useScroll, useTransform } from "motion/react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { NeuralSphere } from "@/components/hero/NeuralSphere";
+import { BlurChars, RotatingWords } from "@/components/motion/Text";
+import { useIntroDone } from "@/components/motion/Intro";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { StatusIndicator } from "@/components/ui/StatusIndicator";
 import { LocalTime } from "@/components/ui/LocalTime";
-import { contactLinks, cvHref, site } from "@/content/site";
+import { cvHref, site } from "@/content/site";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
-  const socials = contactLinks.filter((l) => l.label !== "Email");
+  const ready = useIntroDone();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  // Parallax: the sphere sinks and fades, the copy drifts up as you scroll away.
+  const sphereY = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
+  const sphereScale = useTransform(scrollYProgress, [0, 1], [1, 0.82]);
+  const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const copyY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  // On phones the intro card sits below the fold, so the copy must not fade out.
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const fadeIn = (d: number) => ({
+    initial: { opacity: 0, y: 24, filter: "blur(8px)" },
+    animate: ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined,
+    transition: { duration: 1.1, delay: d, ease: EASE },
+  });
+
   return (
-    <section aria-labelledby="hero-title" className="relative pt-24 md:pt-28">
-      <div className="container-page">
-        {/* Top meta strip */}
-        <Reveal y={0} className="grid-page meta border-b rule pb-4 text-muted">
-          <p className="col-span-2 md:col-span-2 lg:col-span-3">Index — 2026</p>
-          <p className="hidden md:col-span-3 md:block lg:col-span-5">{site.roles.join(" · ")}</p>
-          <p className="col-span-2 text-right md:col-span-3 lg:col-span-4">
-            {site.location} · <LocalTime />
-          </p>
-        </Reveal>
-
-        <div className="grid-page gap-y-14 pt-12 md:pt-16 lg:pt-20">
-          {/* Left — typographic introduction */}
-          <div className="col-span-4 md:col-span-8 lg:col-span-7">
-            <h1 id="hero-title" className="display text-[clamp(3.4rem,10.5vw,9.75rem)]">
-              <LineReveal animateOnMount delay={0.1} lines={["Hello,", <>I&rsquo;m <em className="italic">Fahim.</em></>]} />
-            </h1>
-
-            <p className="heading mt-8 max-w-[22ch] text-[clamp(1.6rem,3.3vw,2.75rem)] leading-[1.08] text-graphite">
-              <LineReveal
-                animateOnMount
-                delay={0.35}
-                lines={[
-                  <>Exploring <em className="italic text-ink">intelligence.</em></>,
-                  <>Building meaningful technology.</>,
-                ]}
-              />
-            </p>
-
-            <div className="mt-12 grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,15.5rem)] md:gap-12">
-              <Reveal delay={0.55}>
-                <p className="max-w-[34rem] text-[1.0625rem] leading-relaxed text-graphite">{site.intro}</p>
-                <div className="mt-9 flex flex-wrap items-center gap-3">
-                  <MagneticButton href="#work">
-                    View selected work <ArrowDown aria-hidden className="size-3.5" />
-                  </MagneticButton>
-                  <MagneticButton href={cvHref} variant="ghost">
-                    Download CV
-                  </MagneticButton>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.7} as="div" className="space-y-6 border-t rule pt-5 md:border-l md:border-t-0 md:pl-6 md:pt-0">
-                <StatusIndicator />
-                <dl className="space-y-4 text-sm">
-                  <div>
-                    <dt className="meta text-muted">Currently</dt>
-                    <dd className="mt-1">{site.status.detail}</dd>
-                  </div>
-                  <div>
-                    <dt className="meta text-muted">Write to</dt>
-                    <dd className="mt-1">
-                      <a href={`mailto:${site.email}`} className="link-under [overflow-wrap:anywhere]">
-                        {site.email}
-                      </a>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="meta text-muted">Find me</dt>
-                    <dd className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
-                      {socials.map((s) => (
-                        <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="link-draw">
-                          {s.label}
-                        </a>
-                      ))}
-                    </dd>
-                  </div>
-                </dl>
-              </Reveal>
-            </div>
-          </div>
-
-          {/* Right — Fig. 1 */}
-          <Reveal
-            delay={0.4}
-            y={0}
-            as="figure"
-            className="col-span-4 md:col-span-6 md:col-start-2 lg:col-span-5 lg:col-start-8"
-          >
-            <div className="border rule bg-paper-2/40 p-4 sm:p-6">
-              <AttentionField />
-            </div>
-            <figcaption className="mt-3 flex items-start justify-between gap-6 text-sm text-graphite">
-              <span>
-                <span className="meta mr-2 text-ink">Fig. 1</span>
-                Attention across three kinds of tokens: words, image patches and interface elements.
-                Move your cursor to place the query.
-              </span>
-            </figcaption>
-          </Reveal>
-        </div>
-
-        <div className="mt-16 flex items-center justify-between border-b rule pb-4 md:mt-24">
-          <a href="#about" className="meta group inline-flex items-center gap-2 text-muted hover:text-ink">
-            <ArrowDown aria-hidden className="size-3.5 transition-transform group-hover:translate-y-0.5" />
-            Scroll
-          </a>
-          <p className="meta text-muted">§ 00 — Introduction</p>
-        </div>
+    <section ref={ref} aria-labelledby="hero-title" className="relative isolate min-h-[100svh] overflow-hidden">
+      {/* Ambient glows */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -left-40 -top-40 size-[34rem] rounded-full bg-violet-deep/25 blur-[140px]" />
+        <div className="absolute -right-48 top-1/3 size-[30rem] rounded-full bg-violet/20 blur-[150px]" />
+        <div className="absolute bottom-[-12rem] left-1/3 size-[26rem] rounded-full bg-aqua/10 blur-[150px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,var(--color-void)_85%)]" />
       </div>
+
+      {/* Sphere */}
+      <motion.div
+        style={{ y: sphereY, scale: sphereScale, opacity: fade }}
+        className="absolute inset-x-0 top-[17rem] mx-auto aspect-square w-[min(96vw,44rem)] md:top-[8%]"
+      >
+        <motion.div
+          className="size-full"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={ready ? { opacity: 1, scale: 1 } : undefined}
+          transition={{ duration: 2, delay: 0.1, ease: EASE }}
+        >
+          <NeuralSphere className="size-full" />
+        </motion.div>
+      </motion.div>
+
+      <motion.div style={desktop ? { y: copyY, opacity: fade } : undefined} className="container-page relative flex min-h-[100svh] flex-col pb-10 pt-28 md:pt-32">
+        {/* Top-left: greeting + name */}
+        <div>
+          <motion.p {...fadeIn(0.1)} className="font-display text-lg text-iris md:text-xl">
+            Hello! I&rsquo;m
+          </motion.p>
+          <h1 id="hero-title" className="heading-xl mt-2 text-[clamp(3rem,9vw,7.5rem)]">
+            <BlurChars text="Fahim" play={ready} delay={0.2} className="block" />
+            <BlurChars text="Foysal" play={ready} delay={0.42} className="block text-gradient" />
+          </h1>
+        </div>
+
+        {/* Mobile: leave room for the sphere under the name */}
+        <div aria-hidden className="h-[88vw] shrink-0 md:hidden" />
+
+        {/* Right column: intro + CTAs (desktop) */}
+        <motion.div
+          {...fadeIn(0.9)}
+          className="order-last mt-10 max-w-sm rounded-3xl border border-line bg-void/45 p-6 backdrop-blur-md md:absolute md:right-[var(--gutter)] md:top-[36%] md:order-none md:mt-0"
+        >
+          <StatusIndicator />
+          <p className="mt-5 text-[0.98rem] leading-relaxed text-dim">{site.intro.split(". ").slice(0, 2).join(". ")}.</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <MagneticButton href="#work">
+              View selected work <ArrowDown aria-hidden className="size-4" />
+            </MagneticButton>
+            <MagneticButton href={cvHref} variant="ghost">
+              Download CV <ArrowUpRight aria-hidden className="size-4" />
+            </MagneticButton>
+          </div>
+        </motion.div>
+
+        {/* Bottom: rotating role + meta */}
+        <div className="flex flex-col gap-8 md:mt-auto md:flex-row md:items-end md:justify-between">
+          <motion.div {...fadeIn(0.7)}>
+            <p className="font-display text-lg text-iris">Exploring intelligence. Building meaningful technology.</p>
+            <p className="heading-xl mt-1 text-[clamp(1.9rem,4.6vw,4rem)]">
+              <RotatingWords words={site.roles} />
+            </p>
+          </motion.div>
+          <motion.dl {...fadeIn(1)} className="grid grid-cols-2 gap-x-10 gap-y-1 text-sm md:text-right">
+            <dt className="eyebrow text-faint">Based in</dt>
+            <dt className="eyebrow text-faint">Local time</dt>
+            <dd className="text-dim">{site.location}</dd>
+            <dd className="text-dim">
+              <LocalTime />
+            </dd>
+          </motion.dl>
+        </div>
+
+      </motion.div>
     </section>
   );
 }
