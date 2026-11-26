@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { BookOpen, GraduationCap, Mail } from "lucide-react";
 import { site } from "@/content/site";
-import { GithubIcon, LinkedinIcon, OrcidIcon } from "@/components/ui/BrandIcons";
+import { BehanceIcon, GithubIcon, LeetcodeIcon, LinkedinIcon, OrcidIcon } from "@/components/ui/BrandIcons";
 
 /** Fixed vertical icon rail on the left edge (desktop only). */
 export function SocialRail() {
@@ -12,6 +12,8 @@ export function SocialRail() {
     { label: "ACL Anthology", href: site.social.acl, Icon: BookOpen },
     { label: "Google Scholar", href: site.social.scholar, Icon: GraduationCap },
     { label: "LinkedIn", href: site.social.linkedin, Icon: LinkedinIcon },
+    { label: "LeetCode", href: site.social.leetcode, Icon: LeetcodeIcon },
+    { label: "Behance", href: site.social.behance, Icon: BehanceIcon },
     { label: "ORCID", href: site.social.orcid, Icon: OrcidIcon },
     { label: "Email", href: `mailto:${site.email}`, Icon: Mail },
   ].filter((i) => i.href);
