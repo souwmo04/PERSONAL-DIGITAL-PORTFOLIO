@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { contactLinks, site } from "@/content/site";
-import { publications, researchInterests } from "@/content/publications";
+import { manuscripts, publications, researchInterests } from "@/content/publications";
 import { projects } from "@/content/projects";
-import { achievements, skillGroups } from "@/content/experience";
+import { achievements, skillGroups, timeline } from "@/content/experience";
 import { PageShell } from "@/components/ui/PageShell";
 import { PrintButton } from "./PrintButton";
 
@@ -54,16 +54,41 @@ export default function CvPage() {
         </header>
 
         <Section title="Education">
-          <p className="font-medium">BSc in Computer Science and Engineering</p>
-          <p className="print-dim text-sm text-dim">North South University, Bangladesh · Expected December 2026</p>
+          <ul className="space-y-3">
+            {timeline
+              .filter((t) => t.kind === "education")
+              .map((t) => (
+                <li key={t.title}>
+                  <p className="font-medium">{t.title}</p>
+                  <p className="print-dim text-sm text-dim">
+                    {t.org} · {t.period}
+                  </p>
+                </li>
+              ))}
+          </ul>
         </Section>
 
-        <Section title="Research">
-          <p className="font-medium">Research Assistant, TriModal AI Lab</p>
-          <p className="print-dim text-sm text-dim">North South University · Current</p>
-          <p className="mt-2 text-sm leading-relaxed">
-            Vision-language and multimodal models; DashLens, vision-language dashboard question answering for accessibility.
-          </p>
+        <Section title="Experience">
+          <ul className="space-y-4">
+            {timeline
+              .filter((t) => t.kind !== "education" && !t.title.startsWith("Workshop paper"))
+              .map((t) => (
+                <li key={t.title}>
+                  <p className="font-medium">
+                    {t.title}, {t.org}
+                  </p>
+                  <p className="print-dim text-sm text-dim">{t.period}</p>
+                  <p className="mt-1 text-sm leading-relaxed">{t.detail}</p>
+                  {t.points ? (
+                    <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm leading-relaxed">
+                      {t.points.map((pt) => (
+                        <li key={pt}>{pt}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </li>
+              ))}
+          </ul>
         </Section>
 
         <Section title="Publications">
@@ -79,19 +104,32 @@ export default function CvPage() {
                 ))}
                 . {p.year}. <em>{p.title}</em>. In {p.venue}, pages {p.pages}. {p.publisher}.
                 {p.doi ? ` DOI ${p.doi}.` : ""}
+                {p.notes?.length ? <span className="print-dim block text-dim">{p.notes.join(" ")}</span> : null}
               </li>
             ))}
           </ol>
         </Section>
 
+        <Section title="Manuscripts">
+          <ul className="space-y-2">
+            {manuscripts.map((m) => (
+              <li key={m.title} className="text-sm leading-relaxed">
+                <em>{m.title}</em>
+              </li>
+            ))}
+          </ul>
+        </Section>
+
         <Section title="Projects">
           <ul className="space-y-3">
-            {projects.map((p) => (
+            {projects
+              .filter((p) => p.slug !== "spectralusc") // listed under Manuscripts
+              .map((p) => (
               <li key={p.slug} className="text-sm leading-relaxed">
                 <span className="font-medium">{p.title}</span>: {p.description}{" "}
                 <span className="print-dim text-dim">({p.stack.slice(0, 4).join(", ")})</span>
               </li>
-            ))}
+              ))}
           </ul>
         </Section>
 
@@ -100,9 +138,10 @@ export default function CvPage() {
             {achievements.map((a) => (
               <li key={a.event + a.year} className="text-sm leading-relaxed">
                 <span className="font-medium">
-                  {a.event} {a.year}
+                  {a.event}
+                  {a.year ? ` ${a.year}` : ""}
                 </span>
-                : {a.rankNote} {a.rank}, {a.scope}
+                : {a.rank} ({a.rankNote}), {a.scope}
                 {a.team ? ` · ${a.team}` : ""}
               </li>
             ))}
