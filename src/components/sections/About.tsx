@@ -8,12 +8,11 @@ import { projects } from "@/content/projects";
 import { publications } from "@/content/publications";
 
 export function About() {
-  const awards = achievements.filter((a) => a.event !== "ACL Anthology").length;
   const stats = [
-    { n: publications.length, label: "ACL Anthology paper", suffix: "" },
-    { n: awards, label: "Competition awards", suffix: "" },
-    { n: projects.length, label: "Selected projects", suffix: "" },
-    { n: 2026, label: "Graduating, NSU", suffix: "" },
+    { n: publications.length, label: "ACL Anthology paper" },
+    { n: achievements.length, label: "Awards & honours" },
+    { n: projects.length, label: "Projects built" },
+    { n: 2026, label: "Graduating, NSU" },
   ];
 
   return (
@@ -37,18 +36,17 @@ export function About() {
         {/* Stats */}
         <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-line bg-line md:grid-cols-4">
           {stats.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08} className="bg-void p-6 md:p-8">
-              <dd className="heading-xl text-[clamp(2.4rem,5vw,3.75rem)] text-gradient">
+            <Reveal key={s.label} delay={i * 0.08} className="flex flex-col bg-void p-6 md:p-8">
+              <dt className="order-2 mt-2 text-sm text-dim">{s.label}</dt>
+              <dd className="order-1 heading-xl text-[clamp(2.4rem,5vw,3.75rem)] text-gradient">
                 <CountUp to={s.n} />
-                {s.suffix}
               </dd>
-              <dt className="mt-2 text-sm text-dim">{s.label}</dt>
             </Reveal>
           ))}
         </dl>
 
         {/* Chapters */}
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
+        <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {about.chapters.map((c, i) => (
             <Reveal key={c.label} delay={i * 0.1}>
               <SpotlightCard as="article" className="h-full p-7">
