@@ -47,7 +47,7 @@ export default function CvPage() {
             <span>{site.location}</span>
             {contactLinks.map((l) => (
               <a key={l.label} href={l.href} className="underline decoration-line underline-offset-4 hover:text-iris">
-                {l.label === "Email" ? site.email : l.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                {l.href.startsWith("http") ? l.href.replace(/^https?:\/\//, "").replace(/\/$/, "").split("?")[0] : l.display}
               </a>
             ))}
           </p>

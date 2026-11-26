@@ -44,15 +44,14 @@ export function Contact() {
               <li key={l.label}>
                 <a
                   href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="group flex items-center justify-between rounded-2xl glass px-5 py-4 transition-colors hover:border-violet/40"
                 >
                   <span className="font-medium">{l.label}</span>
                   <span className="flex items-center gap-2 text-sm text-dim group-hover:text-iris">
                     {l.display}
                     <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    <span className="sr-only">(opens in a new tab)</span>
+                    {l.href.startsWith("http") ? <span className="sr-only">(opens in a new tab)</span> : null}
                   </span>
                 </a>
               </li>
