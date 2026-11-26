@@ -28,6 +28,8 @@ export type Publication = {
   summary: string;
   /** Short context about the shared task / problem setting. */
   context?: string;
+  /** Extra notes shown under the authors, e.g. equal contribution. */
+  notes?: string[];
   contributions: string[];
   /** Reported results, copied from the paper. Never estimate these. */
   results?: { label: string; value: string; note?: string }[];
@@ -41,7 +43,18 @@ export type Publication = {
   bibtex: string;
 };
 
-export type ProjectVisual = "dashlens" | "meditalk" | "couplecare" | "spectra";
+export type ProjectVisual =
+  | "dashlens"
+  | "meditalk"
+  | "couplecare"
+  | "spectra"
+  | "scan"
+  | "map"
+  | "flame"
+  | "weather"
+  | "accent"
+  | "agent"
+  | "car";
 
 export type Project = {
   slug: string;
@@ -51,11 +64,13 @@ export type Project = {
   description: string;
   kind: string;
   /** Used by the project filter tabs. */
-  category: "Research" | "Applied AI";
+  category: "Research" | "Applied AI" | "Web & Mobile";
+  /** Shown on the home page before "Show all projects". */
+  featured?: boolean;
   year?: string;
   areas: string[];
-  problem: string;
-  approach: string[];
+  problem?: string;
+  approach?: string[];
   /** Ordered steps of the system, used for architecture figures. */
   pipeline?: { label: string; detail: string }[];
   features?: { title: string; detail: string }[];
@@ -70,6 +85,8 @@ export type Project = {
     github?: string;
     paper?: string;
     demo?: string;
+    /** Label for the demo link, e.g. "Download APK". */
+    demoLabel?: string;
   };
 };
 
@@ -78,7 +95,14 @@ export type TimelineEntry = {
   title: string;
   org: string;
   detail: string;
-  kind: "research" | "education";
+  kind: "research" | "leadership" | "design" | "education";
+  points?: string[];
+};
+
+export type Manuscript = {
+  title: string;
+  shortTitle: string;
+  area: string;
 };
 
 export type Achievement = {
