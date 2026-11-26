@@ -105,6 +105,35 @@ export const projects: Project[] = [
     visual: "couplecare",
     links: {},
   },
+  {
+    slug: "spectralusc",
+    index: "D",
+    title: "SpectraLUSC",
+    tagline: "Deep learning for medical image classification.",
+    description:
+      "A medical image classification research project exploring deep convolutional and transfer-learning approaches.",
+    kind: "Computer vision research",
+    areas: ["Computer Vision", "Deep Learning", "Medical Imaging", "Classification"],
+    problem:
+      "Reading medical images takes expert time that many hospitals don't have enough of. Automated classifiers can help with triage, but medical datasets are small and imbalanced, and errors are costly. A model has to be accurate, and its behaviour has to be understood.",
+    approach: [
+      "A preprocessing and augmentation pipeline built for small medical datasets.",
+      "Transfer learning from pretrained CNN backbones, fine-tuned for the target classes.",
+      "Evaluation with metrics that suit class imbalance, not just accuracy.",
+      "Visual explanations to check what the model attends to.",
+    ],
+    pipeline: [
+      { label: "Input", detail: "Medical images" },
+      { label: "Prepare", detail: "Normalise, augment, split" },
+      { label: "Learn", detail: "Pretrained backbone, fine-tuned" },
+      { label: "Inspect", detail: "Metrics and attention maps" },
+    ],
+    evaluation:
+      "Results and dataset details will be added here once they are final.",
+    stack: ["Python", "PyTorch", "TensorFlow", "Scikit-learn", "OpenCV"],
+    visual: "spectra",
+    links: {},
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
