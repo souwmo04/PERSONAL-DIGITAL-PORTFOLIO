@@ -1,4 +1,4 @@
-import type { Publication } from "./types";
+import type { Manuscript, Publication } from "./types";
 
 /**
  * Publications — sourced from the ACL Anthology record
@@ -29,6 +29,10 @@ export const publications: Publication[] = [
     location: "Mumbai, India",
     anthologyId: "2025.banglalp-1.60",
     doi: "10.18653/v1/2025.banglalp-1.60",
+    notes: [
+      "Equal contribution: Ahmad Fahmid, Fahim Foysal and Wasif Haider.",
+      "10th place in BLP-2025 Shared Task 2 · USD 200 workshop subsidy.",
+    ],
     context:
       "BLP-2025 Task 2 was the first shared task on code generation from Bangla: systems receive a programming problem written in Bangla and must produce executable Python that passes hidden tests.",
     summary:
@@ -76,4 +80,14 @@ export const researchInterests = [
   { name: "Human-Computer Interaction", note: "AI that fits how people work" },
   { name: "AI Agents", note: "models that act inside GUIs" },
   { name: "Accessible AI Systems", note: "for people technology leaves out" },
+];
+
+/** Manuscripts that are not published. Only the title is shown. */
+export const manuscripts: Manuscript[] = [
+  {
+    title:
+      "SpectraLUSC: An Efficient and Explainable Hyperspectral Framework for Pixel-Level Lung Squamous Cell Carcinoma Classification",
+    shortTitle: "SpectraLUSC",
+    area: "Medical imaging · Hyperspectral · Explainable AI",
+  },
 ];
