@@ -1,4 +1,4 @@
-import type { Achievement, TimelineEntry } from "./types";
+import type { Achievement, SkillGroup, TimelineEntry } from "./types";
 
 export const timeline: TimelineEntry[] = [
   {
@@ -62,5 +62,38 @@ export const achievements: Achievement[] = [
     scope: "BLP-2025 Workshop, IJCNLP-AACL 2025",
     detail: "NSU_PiedPiper at BLP-2025 Task 2",
     href: "/research/nsu-piedpiper-blp-2025",
+  },
+];
+
+export const skillGroups: SkillGroup[] = [
+  {
+    id: "programming",
+    label: "Programming",
+    note: "Languages I think in",
+    items: ["Python", "C++", "JavaScript", "TypeScript"],
+  },
+  {
+    id: "ml",
+    label: "AI & Machine Learning",
+    note: "Frameworks for building and training models",
+    items: ["PyTorch", "TensorFlow", "Hugging Face", "Scikit-learn"],
+  },
+  {
+    id: "research",
+    label: "AI Research",
+    note: "Areas I work in",
+    items: ["LLMs", "RAG", "NLP", "Computer Vision", "VLMs", "Fine-tuning"],
+  },
+  {
+    id: "development",
+    label: "Development",
+    note: "Turning models into products",
+    items: ["React", "Next.js", "FastAPI", "MongoDB"],
+  },
+  {
+    id: "tools",
+    label: "Tools",
+    note: "Everyday environment",
+    items: ["Git", "GitHub", "Docker", "Linux"],
   },
 ];
