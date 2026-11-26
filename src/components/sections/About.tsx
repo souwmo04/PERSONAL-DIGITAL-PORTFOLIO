@@ -2,6 +2,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ScrollWords } from "@/components/motion/Text";
 import { CountUp } from "@/components/ui/CountUp";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
+import { PortraitCard } from "@/components/ui/PortraitCard";
 import { about } from "@/content/about";
 import { achievements } from "@/content/experience";
 import { projects } from "@/content/projects";
@@ -28,10 +29,15 @@ export function About() {
           About
         </h2>
 
-        <ScrollWords
-          text={about.lead}
-          className="heading-xl mt-10 max-w-[22ch] text-[clamp(1.9rem,4.6vw,3.9rem)] !font-medium !leading-[1.12] !tracking-[-0.03em]"
-        />
+        <div className="mt-10 grid items-center gap-14 lg:grid-cols-[1.35fr_1fr] lg:gap-20">
+          <ScrollWords
+            text={about.lead}
+            className="heading-xl max-w-[20ch] text-[clamp(1.9rem,4.4vw,3.6rem)] !font-medium !leading-[1.12] !tracking-[-0.03em]"
+          />
+          <Reveal className="mx-auto w-full max-w-sm lg:max-w-none">
+            <PortraitCard />
+          </Reveal>
+        </div>
 
         {/* Stats */}
         <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-line bg-line md:grid-cols-4">
