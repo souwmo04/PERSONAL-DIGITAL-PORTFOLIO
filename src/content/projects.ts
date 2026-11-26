@@ -78,6 +78,33 @@ export const projects: Project[] = [
     visual: "meditalk",
     links: {},
   },
+  {
+    slug: "couplecare-ai",
+    index: "C",
+    title: "CoupleCare AI",
+    tagline: "Relationship support that speaks Bangla as naturally as English.",
+    description:
+      "A bilingual Bangla–English relationship support assistant built on retrieval-augmented generation and local LLMs.",
+    kind: "Applied NLP",
+    areas: ["Retrieval-Augmented Generation", "Local LLMs", "Conversational AI", "Knowledge retrieval"],
+    problem:
+      "People rarely ask for help with relationships in a second language. Most support tools are English-only, and general chatbots can drift or make things up on sensitive topics. Many people also don't want such private conversations sent to a cloud API.",
+    approach: [
+      "Ground every response in a curated knowledge base through retrieval, so answers come from vetted material rather than from the model's memory alone.",
+      "Run the language model locally, so conversations stay on the user's machine.",
+      "Handle Bangla, English and the code-mixed way people actually write, in both retrieval and generation.",
+      "Keep conversational memory within a session, so support feels continuous instead of one-off.",
+    ],
+    pipeline: [
+      { label: "Query", detail: "Bangla, English or mixed" },
+      { label: "Embed", detail: "Multilingual embeddings" },
+      { label: "Retrieve", detail: "Top-k passages from the knowledge base" },
+      { label: "Generate", detail: "Local LLM, grounded in the context" },
+    ],
+    stack: ["Python", "Local LLMs", "RAG", "Vector search", "Multilingual embeddings"],
+    visual: "couplecare",
+    links: {},
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
