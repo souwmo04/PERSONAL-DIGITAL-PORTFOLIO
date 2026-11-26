@@ -41,7 +41,7 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 
 | Pattern               | Where                         | How                                                          |
 | --------------------- | ----------------------------- | ------------------------------------------------------------ |
-| AI-model loader       | First page of a session       | Greetings in 8 languages ending in Bangla (স্বাগতম) above a "model card": progress bar with shimmer, layer counter (01–24) and loading steps (tokenizer → weights → attention → ready). About 4s, skippable (click, Esc, Enter), gated before first paint; the sheet lifts on a curved edge. |
+| Tech loader           | First page of a session       | The name decodes from random glyphs letter by letter while some letters flicker solid/outline; a terminal runs a joke build log ("brewing chai for the GPU", "downloading more RAM… (legally)", "it works on my machine ✓") with an ASCII progress bar. At 100% the name flies into the nav logo as the sheet lifts on a curved edge. About 4s, skippable, once per session. |
 | Portrait tilt         | About                         | The photo tilts in 3D toward the cursor with a moving light glare |
 | Blur-in characters    | Hero name, page titles        | Letters rise 0.35em from 10px blur, 35ms apart               |
 | Rotating words        | Hero roles                    | Vertical slide with blur, every 2.6s                         |
@@ -50,6 +50,9 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 | Timeline fill         | Career                        | The centre line scales with scroll; cards slide in from alternating sides |
 | Spotlight cards       | About, awards, interests      | A radial light follows the cursor                            |
 | Animated filter pill  | Projects                      | A shared `layoutId` pill glides between tabs; cards blur out and in |
+| Section stage         | Every home section            | Scroll-scrubbed: each section rises from 90% scale, 90px down and 48px radius to full size, like a card being dealt; alternate sections sit on a slightly lighter panel |
+| Velocity marquee      | Between sections              | Giant tilted word strips (solid/outline alternating) that drift, speed up with scroll velocity and reverse on scroll up |
+| Card parallax         | Projects                      | Right-column cards move against the scroll more than left ones, giving the grid depth |
 | Marquee               | Tech stack                    | Two rows in opposite directions; pauses on hover             |
 | Roll text             | Navigation, resume            | Letters roll upward on hover                                 |
 | Magnetic buttons      | Main calls to action          | Lean up to about 8px toward the cursor, with a sheen         |
