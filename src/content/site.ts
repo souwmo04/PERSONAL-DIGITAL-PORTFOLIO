@@ -21,6 +21,8 @@ export const site = {
   location: "Bangladesh",
   timezone: "Asia/Dhaka",
   email: "fahim.foysal0411@gmail.com",
+  phone: "+880 1711-946008",
+  phoneHref: "tel:+8801711946008",
 
   status: {
     available: true,
@@ -49,10 +51,10 @@ export const site = {
 
   social: {
     github: "https://github.com/souwmo04",
-    linkedin: "", // send your linkedin.com/in/... profile URL
+    linkedin: "https://www.linkedin.com/in/fahim-foysal-26a68a251/",
     leetcode: "https://leetcode.com/u/Fahim_F_Souwmik/",
     behance: "https://www.behance.net/KingScorpe/projects",
-    scholar: "",
+    scholar: "https://scholar.google.com/citations?user=w6eDQZ0AAAAJ&hl=en",
     acl: "https://aclanthology.org/people/fahim-foysal/",
     orcid: "",
     openreview: "",
@@ -62,6 +64,7 @@ export const site = {
 /** Ordered contact channels. Empty hrefs are filtered out. */
 export const contactLinks: LinkItem[] = [
   { label: "Email", href: `mailto:${site.email}`, display: site.email },
+  { label: "Phone", href: site.phoneHref, display: site.phone },
   { label: "LinkedIn", href: site.social.linkedin, display: "Profile" },
   { label: "GitHub", href: site.social.github, display: "@souwmo04" },
   { label: "LeetCode", href: site.social.leetcode, display: "Fahim_F_Souwmik" },
