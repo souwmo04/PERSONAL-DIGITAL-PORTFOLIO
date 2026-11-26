@@ -11,6 +11,7 @@ import { GithubIcon } from "@/components/ui/BrandIcons";
 import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { Parallax } from "@/components/motion/Parallax";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const FILTERS = ["All", "Research", "Applied AI", "Web & Mobile"] as const;
@@ -77,6 +78,7 @@ export function Projects() {
                 exit={{ opacity: 0, scale: 0.94, filter: "blur(8px)", transition: { duration: 0.35 } }}
                 transition={{ duration: 0.9, delay: (i % 2) * 0.1, ease: EASE }}
               >
+                <Parallax amount={i % 2 ? 50 : 18} className="h-full">
                 <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass transition-[border-color,transform] duration-500 ease-out-expo hover:-translate-y-1.5 hover:border-violet/35">
                   {p.cover ? (
                     <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-night">
@@ -131,6 +133,7 @@ export function Projects() {
                     </div>
                   </div>
                 </article>
+                </Parallax>
               </motion.li>
             ))}
           </AnimatePresence>
