@@ -2,19 +2,25 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ProjectArt } from "@/components/projects/ProjectArt";
 import { GithubIcon } from "@/components/ui/BrandIcons";
 import { projects } from "@/content/projects";
+import { site } from "@/content/site";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const FILTERS = ["All", "Research", "Applied AI"] as const;
+const FILTERS = ["All", "Research", "Applied AI", "Web & Mobile"] as const;
 
 export function Projects() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
-  const shown = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const [expanded, setExpanded] = useState(false);
+  const filtered = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  // "All" starts with the featured projects; a category shows everything in it.
+  const shown = filter === "All" && !expanded ? filtered.filter((p) => p.featured) : filtered;
+  const hiddenCount = filtered.length - shown.length;
 
   return (
     <section id="work" aria-labelledby="work-title" className="section-y relative">
@@ -25,7 +31,7 @@ export function Projects() {
           eyebrow="Built & shipped"
           title="Selected"
           accent="projects"
-          lead="Research systems and applied AI products, from the question to something that runs."
+          lead="Research systems, applied AI, and web and mobile products, from the question to something that runs."
         />
 
         <div role="group" aria-label="Filter projects" className="mt-10 flex flex-wrap justify-center gap-2">
@@ -102,7 +108,7 @@ export function Projects() {
                       ) : null}
                       {p.links.demo ? (
                         <a href={p.links.demo} target="_blank" rel="noopener noreferrer" className="text-dim hover:text-text">
-                          Live demo
+                          {p.links.demoLabel ?? "Live demo"}
                         </a>
                       ) : null}
                     </div>
@@ -112,6 +118,23 @@ export function Projects() {
             ))}
           </AnimatePresence>
         </motion.ul>
+
+        <div className="mt-12 flex flex-col items-center gap-5">
+          {hiddenCount > 0 ? (
+            <button
+              type="button"
+              onClick={() => setExpanded(true)}
+              className="group inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 text-sm text-dim transition-colors hover:border-violet/50 hover:text-text"
+            >
+              Show all projects ({filtered.length})
+              <ChevronDown aria-hidden className="size-4 transition-transform group-hover:translate-y-0.5" />
+            </button>
+          ) : null}
+          <MagneticButton href={site.social.github}>
+            <GithubIcon className="size-4" aria-hidden /> Visit my GitHub
+            <ArrowUpRight aria-hidden className="size-4" />
+          </MagneticButton>
+        </div>
       </div>
     </section>
   );
