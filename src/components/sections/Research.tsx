@@ -2,7 +2,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { PublicationEntry } from "@/components/research/PublicationEntry";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { SpotlightCard } from "@/components/ui/SpotlightCard";
-import { publications, researchInterests } from "@/content/publications";
+import { manuscripts, publications, researchInterests } from "@/content/publications";
 import { site } from "@/content/site";
 import { ArrowUpRight } from "lucide-react";
 
@@ -25,6 +25,24 @@ export function Research() {
             </Reveal>
           ))}
         </div>
+
+        {manuscripts.length ? (
+          <div className="mt-8">
+            <Reveal>
+              <h3 className="eyebrow text-faint">Manuscripts</h3>
+            </Reveal>
+            <ul className="mt-4 space-y-3">
+              {manuscripts.map((m) => (
+                <Reveal as="li" key={m.title}>
+                  <div className="flex flex-col gap-3 rounded-2xl glass p-6 md:flex-row md:items-center md:justify-between md:gap-10">
+                    <p className="font-display text-[1.1rem] font-semibold leading-snug">{m.title}</p>
+                    <span className="chip shrink-0">{m.area}</span>
+                  </div>
+                </Reveal>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         <div className="mt-24">
           <Reveal className="flex flex-wrap items-end justify-between gap-4">

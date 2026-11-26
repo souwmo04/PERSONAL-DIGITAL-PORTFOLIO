@@ -63,6 +63,16 @@ export function PublicationEntry({ pub, index }: { pub: Publication; index: numb
         {pub.location ? `, ${pub.location}` : ""}.
       </p>
 
+      {pub.notes?.length ? (
+        <ul className="relative mt-4 flex flex-wrap gap-2">
+          {pub.notes.map((n) => (
+            <li key={n} className="rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1 text-xs text-emerald-100/90">
+              {n}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
       <p className="relative mt-7 max-w-3xl text-[1.0625rem] leading-relaxed text-text/90">{pub.summary}</p>
 
       <div className="relative mt-6 flex flex-wrap gap-2">
