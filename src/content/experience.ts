@@ -16,14 +16,6 @@ export const timeline: TimelineEntry[] = [
     kind: "research",
   },
   {
-    period: "Dec 2025",
-    title: "Workshop paper, ACL Anthology",
-    org: "BLP-2025 at IJCNLP-AACL 2025",
-    detail:
-      "Co-first author (equal contribution) of a system paper for the first shared task on code generation from Bangla instructions. The team placed 10th in the shared task.",
-    kind: "research",
-  },
-  {
     period: "Apr 2023 – Jan 2025",
     title: "Graphics Designer, Sub Executive",
     org: "IEEE NSU Student Branch",

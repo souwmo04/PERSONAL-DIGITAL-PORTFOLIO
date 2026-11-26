@@ -71,7 +71,7 @@ export default function CvPage() {
         <Section title="Experience">
           <ul className="space-y-4">
             {timeline
-              .filter((t) => t.kind !== "education" && !t.title.startsWith("Workshop paper"))
+              .filter((t) => t.kind !== "education")
               .map((t) => (
                 <li key={t.title}>
                   <p className="font-medium">
