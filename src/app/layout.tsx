@@ -1,39 +1,29 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, JetBrains_Mono, Newsreader, Noto_Serif_Bengali } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Bengali, Sora } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { Cursor } from "@/components/ui/Cursor";
 import { SiteNav } from "@/components/layout/SiteNav";
+import { SocialRail } from "@/components/layout/SocialRail";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { site } from "@/content/site";
 import "./globals.css";
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
-
 // Bangla glyphs only appear in a few places, so this font is not preloaded.
-const bengali = Noto_Serif_Bengali({
+const bengali = Noto_Sans_Bengali({
   variable: "--font-bengali",
   subsets: ["bengali"],
-  weight: ["400"],
-  display: "swap",
-  preload: false,
-});
-
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
   weight: ["400", "500"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -75,7 +65,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f1ede4",
+  themeColor: "#060609",
   width: "device-width",
   initialScale: 1,
 };
@@ -87,10 +77,7 @@ const personJsonLd = {
   url: site.url,
   email: `mailto:${site.email}`,
   jobTitle: "Research Assistant",
-  worksFor: {
-    "@type": "Organization",
-    name: "TriModal AI Lab, North South University",
-  },
+  worksFor: { "@type": "Organization", name: "TriModal AI Lab, North South University" },
   alumniOf: { "@type": "CollegeOrUniversity", name: "North South University" },
   address: { "@type": "PostalAddress", addressCountry: "BD" },
   knowsAbout: [
@@ -108,19 +95,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${geist.variable} ${jetbrains.variable} ${bengali.variable} antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${sora.variable} ${bengali.variable} antialiased`}
     >
       <body className="grain min-h-dvh">
         <div id="top" aria-hidden />
         <a
           href="#main"
-          className="meta fixed left-4 top-4 z-[100] -translate-y-24 bg-ink px-4 py-3 text-paper transition-transform focus:translate-y-0"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-violet px-4 py-2 text-sm font-medium text-void transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>
         <MotionProvider>
+          <SmoothScroll />
+          <Cursor />
           <div className="no-print">
             <SiteNav />
+            <SocialRail />
           </div>
           <main id="main">{children}</main>
           <div className="no-print">
