@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
 import { ProjectArt } from "@/components/projects/ProjectArt";
+import { Gallery } from "@/components/projects/Gallery";
 import { Reveal } from "@/components/motion/Reveal";
 import { BlurChars } from "@/components/motion/Text";
 import { OutLink, PageShell } from "@/components/ui/PageShell";
@@ -73,9 +73,15 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
           </Reveal>
         </header>
 
-        <Reveal className="group mt-16 overflow-hidden rounded-[2rem] border border-line">
-          <ProjectArt visual={p.visual} className="aspect-[16/9] md:aspect-[21/9]" />
-        </Reveal>
+        {p.screenshots?.length ? (
+          <Reveal className="mt-16">
+            <Gallery shots={p.screenshots} title={p.title} />
+          </Reveal>
+        ) : (
+          <Reveal className="group mt-16 overflow-hidden rounded-[2rem] border border-line">
+            <ProjectArt visual={p.visual} className="aspect-[16/9] md:aspect-[21/9]" />
+          </Reveal>
+        )}
 
         <div className="mt-20 space-y-14">
           {p.problem ? (
@@ -156,25 +162,6 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
             </ul>
           </Block>
 
-          {p.screenshots?.length ? (
-            <Block id="screens" label="Screens">
-              <div className="grid gap-6 md:grid-cols-2">
-                {p.screenshots.map((s) => (
-                  <figure key={s.src}>
-                    <Image
-                      src={s.src}
-                      alt={s.alt}
-                      width={s.width}
-                      height={s.height}
-                      sizes="(min-width: 768px) 50vw, 100vw"
-                      className="h-auto w-full rounded-2xl border border-line"
-                    />
-                    <figcaption className="mt-2 text-sm text-dim">{s.alt}</figcaption>
-                  </figure>
-                ))}
-              </div>
-            </Block>
-          ) : null}
         </div>
 
         <Link
