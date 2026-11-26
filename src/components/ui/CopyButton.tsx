@@ -31,9 +31,9 @@ export function CopyButton({
     <button
       type="button"
       onClick={onCopy}
-      className={`meta inline-flex items-center gap-1.5 transition-colors hover:text-vermilion ${className}`}
+      className={`inline-flex items-center gap-1.5 text-xs text-dim transition-colors hover:text-iris ${className}`}
     >
-      {copied ? <Check aria-hidden className="size-3.5" /> : <Copy aria-hidden className="size-3.5" />}
+      {copied ? <Check aria-hidden className="size-3.5 text-emerald-400" /> : <Copy aria-hidden className="size-3.5" />}
       <span aria-live="polite">{copied ? copiedLabel : label}</span>
     </button>
   );
