@@ -30,6 +30,21 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 | `aqua`         | `#67e8f9`                | Second accent, used sparingly (pulses, progress) |
 | `line`         | `rgb(255 255 255 / .08)` | Hairlines and card borders           |
 
+### Alternate theme: "Aurum" (gold)
+
+A toggle in the nav switches to a gold palette. The choice is saved, and it is applied before the first paint.
+
+| Token          | Value     | Use                            |
+| -------------- | --------- | ------------------------------ |
+| `void`         | `#080705` | Warm black background          |
+| `text`         | `#f6f0e3` | Ivory text                     |
+| `violet` → gold | `#d4af37` | Accent, glows, focus           |
+| `violet-deep`  | `#8c6a1a` | Deep gold for gradients        |
+| `iris` → champagne | `#f1dfa8` | Light accent text          |
+| `aqua` → amber | `#e8b86a` | Second accent                  |
+
+Display type changes to Cormorant Garamond (an elegant serif). Every component reads the same tokens, including the canvas sphere, so the whole site follows the theme.
+
 ### Type
 
 - **Display:** Sora 600, tight tracking (-0.04em).
@@ -48,7 +63,7 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 | Scroll-lit paragraph  | About lead                    | Each word goes from 14% to 100% opacity as it scrolls        |
 | Masked line reveal    | Section headings              | Lines slide up from behind a clip with a slight rotation     |
 | Timeline fill         | Career                        | The centre line scales with scroll; cards slide in from alternating sides |
-| Spotlight cards       | About, awards, interests      | A radial light follows the cursor                            |
+| Card hover            | All cards                     | A 3D tilt toward the cursor, a spotlight following it, a light beam running around the border (an animated conic gradient), and a lift with glow |
 | Animated filter pill  | Projects                      | A shared `layoutId` pill glides between tabs; cards blur out and in |
 | Section stage         | Every home section            | Scroll-scrubbed: each section rises from 90% scale, 90px down and 48px radius to full size, like a card being dealt; alternate sections sit on a slightly lighter panel |
 | Velocity marquee      | Between sections              | Giant tilted word strips (solid/outline alternating) that drift, speed up with scroll velocity and reverse on scroll up |
