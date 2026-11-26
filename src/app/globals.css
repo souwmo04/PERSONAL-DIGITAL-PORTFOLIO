@@ -15,9 +15,9 @@
   --color-signal: #e8572a;
   --color-fog: #a9a597;
 
-  --font-serif: var(--font-newsreader), "Times New Roman", serif;
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-serif: var(--font-newsreader), var(--font-bengali), "Times New Roman", serif;
+  --font-sans: var(--font-geist), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), var(--font-bengali), ui-monospace, monospace;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 

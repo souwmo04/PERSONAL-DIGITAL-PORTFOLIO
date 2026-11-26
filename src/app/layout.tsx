@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Geist, JetBrains_Mono, Newsreader, Noto_Serif_Bengali } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SiteNav } from "@/components/layout/SiteNav";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -12,6 +12,15 @@ const newsreader = Newsreader({
   style: ["normal", "italic"],
   axes: ["opsz"],
   display: "swap",
+});
+
+// Bangla glyphs only appear in a few places, so this font is not preloaded.
+const bengali = Noto_Serif_Bengali({
+  variable: "--font-bengali",
+  subsets: ["bengali"],
+  weight: ["400"],
+  display: "swap",
+  preload: false,
 });
 
 const geist = Geist({
@@ -99,7 +108,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${geist.variable} ${jetbrains.variable} antialiased`}
+      className={`${newsreader.variable} ${geist.variable} ${jetbrains.variable} ${bengali.variable} antialiased`}
     >
       <body className="grain min-h-dvh">
         <div id="top" aria-hidden />
