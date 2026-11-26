@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono, Newsreader } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { SiteNav } from "@/components/layout/SiteNav";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -108,7 +110,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <MotionProvider>
+          <div className="no-print">
+            <SiteNav />
+          </div>
           <main id="main">{children}</main>
+          <div className="no-print">
+            <SiteFooter />
+          </div>
         </MotionProvider>
         <script
           type="application/ld+json"
