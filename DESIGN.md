@@ -30,21 +30,6 @@ scrolling, soft violet light in a near-black space, and type that arrives rather
 | `aqua`         | `#67e8f9`                | Second accent, used sparingly (pulses, progress) |
 | `line`         | `rgb(255 255 255 / .08)` | Hairlines and card borders           |
 
-### Alternate theme: "Aurum" (gold)
-
-A toggle in the nav switches to a gold palette. The choice is saved, and it is applied before the first paint.
-
-| Token          | Value     | Use                            |
-| -------------- | --------- | ------------------------------ |
-| `void`         | `#080705` | Warm black background          |
-| `text`         | `#f6f0e3` | Ivory text                     |
-| `violet` → gold | `#d4af37` | Accent, glows, focus           |
-| `violet-deep`  | `#8c6a1a` | Deep gold for gradients        |
-| `iris` → champagne | `#f1dfa8` | Light accent text          |
-| `aqua` → amber | `#e8b86a` | Second accent                  |
-
-Display type changes to Cormorant Garamond (an elegant serif). Every component reads the same tokens, including the canvas sphere, so the whole site follows the theme.
-
 ### Type
 
 - **Display:** Sora 600, tight tracking (-0.04em).

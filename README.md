@@ -54,8 +54,14 @@ npm run lint
 npm run build
 ```
 
-## Deploy on Vercel
+## Deploy on Netlify
 
-1. Import this repository at [vercel.com/new](https://vercel.com/new). The framework is detected automatically.
-2. Optional: set `NEXT_PUBLIC_SITE_URL` (for example `https://your-domain.com`) once you connect a custom
-   domain. Without it, the site uses Vercel's production URL for canonical links and the sitemap.
+The site is deployed on Netlify from this repository. Every push to `main` triggers a new deploy.
+
+- Netlify detects Next.js and installs its adapter automatically. `netlify.toml` only pins the build
+  command (`npm run build`) and Node 22.
+- Canonical links, the sitemap and social previews use Netlify's site address automatically (`URL`).
+  Once you connect a custom domain, set `NEXT_PUBLIC_SITE_URL` (for example `https://your-domain.com`) under
+  **Site configuration → Environment variables**, then redeploy.
+
+It also deploys on Vercel without changes.
