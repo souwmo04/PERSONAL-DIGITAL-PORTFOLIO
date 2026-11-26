@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
             <div className="mt-8 flex flex-wrap gap-3">
               {p.links.github ? <OutLink href={p.links.github}>GitHub</OutLink> : null}
               {p.links.paper ? <OutLink href={p.links.paper}>Paper</OutLink> : null}
-              {p.links.demo ? <OutLink href={p.links.demo}>Live demo</OutLink> : null}
+              {p.links.demo ? <OutLink href={p.links.demo}>{p.links.demoLabel ?? "Live demo"}</OutLink> : null}
             </div>
           </Reveal>
         </header>
@@ -78,20 +78,24 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         </Reveal>
 
         <div className="mt-20 space-y-14">
-          <Block id="problem" label="Problem">
-            <p className="font-display text-[clamp(1.25rem,2.2vw,1.65rem)] leading-snug">{p.problem}</p>
-          </Block>
+          {p.problem ? (
+            <Block id="problem" label="Problem">
+              <p className="font-display text-[clamp(1.25rem,2.2vw,1.65rem)] leading-snug">{p.problem}</p>
+            </Block>
+          ) : null}
 
-          <Block id="approach" label="Technical approach">
-            <ol className="space-y-3">
-              {p.approach.map((a, n) => (
-                <li key={n} className="flex gap-4 rounded-2xl glass p-5 text-[1.02rem] leading-relaxed">
-                  <span className="font-mono text-sm text-violet">0{n + 1}</span>
-                  <span>{a}</span>
-                </li>
-              ))}
-            </ol>
-          </Block>
+          {p.approach ? (
+            <Block id="approach" label="Technical approach">
+              <ol className="space-y-3">
+                {p.approach.map((a, n) => (
+                  <li key={n} className="flex gap-4 rounded-2xl glass p-5 text-[1.02rem] leading-relaxed">
+                    <span className="font-mono text-sm text-violet">0{n + 1}</span>
+                    <span>{a}</span>
+                  </li>
+                ))}
+              </ol>
+            </Block>
+          ) : null}
 
           {p.pipeline ? (
             <Block id="architecture" label="Architecture">
