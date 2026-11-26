@@ -14,6 +14,23 @@ export const timeline: TimelineEntry[] = [
       "Working on DashLens, a vision-language approach to accessible dashboard question answering",
     ],
     kind: "research",
+    mode: "On-site · Dhaka",
+    tags: ["PyTorch", "Multimodal AI", "VLMs", "NLP", "Benchmarking"],
+  },
+  {
+    period: "Ongoing",
+    title: "Freelance Software Developer",
+    org: "Agency projects",
+    detail:
+      "I take on short projects through an agency: small software builds and computer-science problems for clients, delivered on tight timelines.",
+    points: [
+      "Solve CSE tasks end to end, from algorithms and data structures to databases and machine learning",
+      "Build small web and desktop applications to a client's brief",
+      "Pick up a new stack quickly when a project needs it",
+    ],
+    kind: "engineering",
+    mode: "Remote",
+    tags: ["Problem solving", "Python", "Java", "C++", "Web development", "Machine learning"],
   },
   {
     period: "Apr 2023 – Jan 2025",
@@ -25,6 +42,7 @@ export const timeline: TimelineEntry[] = [
       "Named Best Sub Executive Body Member (2023–2025)",
     ],
     kind: "design",
+    tags: ["Visual design", "Event branding", "Promotional design", "Teamwork"],
   },
   {
     period: "2022 – 2023",

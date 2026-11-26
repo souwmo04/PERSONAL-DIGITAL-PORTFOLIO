@@ -107,8 +107,11 @@ export type TimelineEntry = {
   title: string;
   org: string;
   detail: string;
-  kind: "research" | "leadership" | "design" | "education";
+  kind: "research" | "engineering" | "leadership" | "design" | "education";
   points?: string[];
+  /** e.g. "Remote", "On-site". */
+  mode?: string;
+  tags?: string[];
 };
 
 export type Manuscript = {
