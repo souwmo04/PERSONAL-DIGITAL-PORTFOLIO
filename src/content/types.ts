@@ -43,6 +43,16 @@ export type Publication = {
   bibtex: string;
 };
 
+export type Shot = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /** "figure" = a chart or result plot (shown on a light panel); "mobile" = a phone screenshot. */
+  kind?: "screen" | "mobile" | "figure";
+  caption?: string;
+};
+
 export type ProjectVisual =
   | "dashlens"
   | "meditalk"
@@ -79,8 +89,10 @@ export type Project = {
   contributions?: string[];
   stack: string[];
   visual: ProjectVisual;
-  /** Optional screenshots placed in /public/projects/<slug>/. */
-  screenshots?: { src: string; alt: string; width: number; height: number }[];
+  /** Card image. Without one, the card shows the animated artwork. */
+  cover?: Shot;
+  /** Screenshots or result figures placed in /public/projects/<slug>/. */
+  screenshots?: Shot[];
   links: {
     github?: string;
     paper?: string;
