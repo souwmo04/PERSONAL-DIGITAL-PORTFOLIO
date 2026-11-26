@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
@@ -77,7 +78,23 @@ export function Projects() {
                 transition={{ duration: 0.9, delay: (i % 2) * 0.1, ease: EASE }}
               >
                 <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] glass transition-[border-color,transform] duration-500 ease-out-expo hover:-translate-y-1.5 hover:border-violet/35">
-                  <ProjectArt visual={p.visual} className="aspect-[16/10] border-b border-line" />
+                  {p.cover ? (
+                    <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-night">
+                      <Image
+                        src={p.cover.src}
+                        alt={p.cover.alt}
+                        fill
+                        sizes="(min-width: 768px) 40rem, 100vw"
+                        className="object-cover object-top transition-transform duration-700 ease-out-expo group-hover:scale-[1.05]"
+                      />
+                      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-void/70 via-transparent to-transparent" />
+                      <span className="absolute bottom-3 left-3 rounded-full bg-void/70 px-2.5 py-1 text-[0.65rem] uppercase tracking-[0.16em] text-iris backdrop-blur">
+                        Real screenshot
+                      </span>
+                    </div>
+                  ) : (
+                    <ProjectArt visual={p.visual} className="aspect-[16/10] border-b border-line" />
+                  )}
                   <div className="flex flex-1 flex-col p-7">
                     <div className="flex items-center justify-between gap-4">
                       <span className="pill !text-[0.625rem]">{p.kind}</span>
