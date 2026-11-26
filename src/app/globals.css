@@ -48,9 +48,38 @@
   }
 }
 
+/* ------------------------------------------------------------------
+   "Aurum" theme: warm black, champagne text and gold light, with an
+   elegant serif for display type. Every component reads these tokens.
+   ------------------------------------------------------------------ */
+html[data-theme="gold"] {
+  --color-void: #080705;
+  --color-night: #100d09;
+  --color-surface: #16120c;
+  --color-line: rgb(255 236 200 / 0.1);
+  --color-text: #f6f0e3;
+  --color-dim: #bdb29c;
+  --color-faint: #857c69;
+  --color-violet: #d4af37;
+  --color-violet-deep: #8c6a1a;
+  --color-iris: #f1dfa8;
+  --color-aqua: #e8b86a;
+  --font-display: var(--font-cormorant), var(--font-geist), serif;
+}
+html[data-theme="gold"] .heading-xl {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+html,
+body {
+  transition: background-color 0.5s ease;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   background: var(--color-void);
+  /* Reserve the scrollbar's space so the page never shifts sideways when scrolling is locked or unlocked. */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -92,12 +121,83 @@ body {
   }
 }
 
+/* ------------------------------------------------------------------
+   Card hover: 3D tilt (set from JS via --rx/--ry), a light beam running
+   around the border, and a soft lift with glow.
+   ------------------------------------------------------------------ */
+@property --fx-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes fx-spin {
+  to {
+    --fx-angle: 360deg;
+  }
+}
+.fx-card {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    box-shadow 0.5s var(--ease-out-expo),
+    border-color 0.4s;
+  will-change: transform;
+}
+.fx-card:hover {
+  --lift: -6px;
+  box-shadow: 0 34px 70px -34px color-mix(in oklab, var(--color-violet) 60%, transparent);
+}
+.fx-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--fx-angle),
+    transparent 0 58%,
+    var(--color-violet) 72%,
+    var(--color-iris) 80%,
+    transparent 92%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+  animation: fx-spin 3.5s linear infinite;
+  pointer-events: none;
+}
+.fx-card:hover::before,
+.fx-card:focus-within::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-card {
+    transform: none !important;
+  }
+  .fx-card::before {
+    animation: none;
+  }
+}
+
 /* Loader: hidden before first paint for returning visitors; page locked while it plays. */
 html.intro-seen [data-intro] {
   display: none;
 }
 html.intro-active {
   overflow: hidden;
+}
+/* While the loader plays, the nav logo hides; the loader's wordmark lands on it and they cross-fade. */
+html.intro-active [data-nav-logo],
+html.intro-landing [data-nav-logo] {
+  opacity: 0;
+}
+[data-nav-logo] {
+  transition: opacity 0.35s ease;
 }
 
 /* Hide the system cursor only where the custom cursor is active. */
@@ -137,7 +237,7 @@ html.has-cursor button {
 
 /* Soft violet-to-white gradient text. */
 @utility text-gradient {
-  background: linear-gradient(100deg, #f5f3ff 0%, var(--color-iris) 45%, var(--color-violet) 75%, #8b5cf6 100%);
+  background: linear-gradient(100deg, var(--color-text) 0%, var(--color-iris) 45%, var(--color-violet) 75%, var(--color-violet-deep) 110%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -156,8 +256,8 @@ html.has-cursor button {
   align-items: center;
   gap: 0.4rem;
   border-radius: 9999px;
-  border: 1px solid rgb(167 139 250 / 0.28);
-  background: rgb(167 139 250 / 0.08);
+  border: 1px solid color-mix(in oklab, var(--color-violet) 28%, transparent);
+  background: color-mix(in oklab, var(--color-violet) 8%, transparent);
   padding: 0.3rem 0.8rem;
   font-family: var(--font-mono);
   font-size: 0.6875rem;

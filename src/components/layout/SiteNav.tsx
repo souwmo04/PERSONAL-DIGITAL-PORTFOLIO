@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/
 import { useEffect, useRef, useState } from "react";
 import { cvHref, navItems, site } from "@/content/site";
 import { RollText } from "@/components/ui/RollText";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -106,6 +107,7 @@ export function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link
               href={cvHref}
               className="group hidden items-center gap-2 rounded-full border border-line px-4 py-2 text-[0.78rem] font-medium uppercase tracking-[0.14em] transition-colors hover:border-violet/50 md:flex"
