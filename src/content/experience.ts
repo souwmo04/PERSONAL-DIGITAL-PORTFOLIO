@@ -119,10 +119,10 @@ export const achievements: Achievement[] = [
     scope: "Finalist",
   },
   {
-    year: "",
+    year: "2024",
     rank: "Top 10",
     rankNote: "Finalist",
-    event: "BUET Game Jam",
+    event: "BUET CSE Fest Game Jam",
     scope: "Finalist",
   },
   {
