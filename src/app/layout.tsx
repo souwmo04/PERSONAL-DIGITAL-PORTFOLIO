@@ -97,7 +97,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geist.variable} ${geistMono.variable} ${sora.variable} ${bengali.variable} antialiased`}
     >
-      <body className="grain min-h-dvh">
+      {/* suppressHydrationWarning: extensions such as Grammarly add attributes to <body> before React loads. */}
+      <body className="grain min-h-dvh" suppressHydrationWarning>
         <div id="top" aria-hidden />
         <a
           href="#main"
